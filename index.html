@@ -3,268 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>/// TERMINAL: Temu_Link_Ops_v3.2 ///</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <title>/// TERMINAL: TEMU DECRYPT ///</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --hacker-green: #00ff00;
-            --hacker-blue: #00ffff;
-            --hacker-dark: #1a1a1a;
-            --hacker-darker: #0d0d0d;
-            --hacker-grey: #666;
-            --hacker-red: #ff0000;
+            --hacker-green: #00ff00; /* Neon Green */
+            --hacker-dark: #1a1a1a; /* Dark background */
+            --hacker-medium: #333333; /* Slightly lighter dark */
+            --hacker-light: #004d00; /* Darker green for accents */
+            --hacker-text: #00ff00; /* Neon green text */
+            --hacker-glow: rgba(0, 255, 0, 0.4); /* Green glow */
+            --hacker-border: #008000; /* Border green */
+            --hacker-error: #ff0000; /* Red for errors */
         }
 
         body {
-            font-family: 'VT323', monospace;
-            background-color: var(--hacker-darker);
-            color: var(--hacker-green);
+            font-family: 'Fira Code', monospace;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            background: radial-gradient(circle at center, var(--hacker-medium) 0%, var(--hacker-dark) 100%);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cuc2d2ZW5kZXIuY29tL3N2ZzAwNjczODciPgogICAgPGrectHdyLz4KPC9zdmc+'); /* Subtle static/circuit pattern */
+            background-repeat: repeat;
+            background-size: 16px 16px;
             margin: 0;
-            padding: 1rem; /* Responsive padding */
+            padding: 20px;
             box-sizing: border-box;
-            overflow-x: hidden; /* Prevent horizontal scroll from effects */
-            position: relative;
+            color: var(--hacker-text);
+            text-shadow: 0 0 5px var(--hacker-glow);
+            overflow: hidden; /* Prevent scrollbar from background */
         }
 
-        /* Scanline Overlay */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: repeating-linear-gradient(
-                to bottom,
-                transparent 0px,
-                transparent 1px,
-                rgba(0, 255, 0, 0.05) 1px,
-                rgba(0, 255, 0, 0.05) 2px
-            );
-            z-index: -1;
-            animation: scanlines 1s linear infinite;
-        }
-
-        @keyframes scanlines {
-            from { background-position: 0 0; }
-            to { background-position: 0 50px; }
-        }
-
-        /* Terminal Container */
-        .terminal-window {
+        .container {
             background-color: var(--hacker-dark);
             border: 2px solid var(--hacker-green);
-            box-shadow: 0 0 15px var(--hacker-green), inset 0 0 10px var(--hacker-green);
-            padding: 1.5rem; /* Responsive padding */
+            box-shadow: 0 0 20px var(--hacker-glow), inset 0 0 10px var(--hacker-light);
+            padding: 40px;
             border-radius: 8px;
-            width: 100%; /* Fluid width */
-            max-width: 800px;
-            box-sizing: border-box;
-            position: relative;
-            z-index: 1;
-            overflow: hidden;
-            margin: auto; /* Center in viewport if height allows */
-        }
-
-        .terminal-header {
-            font-family: 'Press Start 2P', cursive;
-            color: var(--hacker-blue);
             text-align: center;
-            margin-bottom: 1.5rem; /* Responsive margin */
-            font-size: 1.2em; /* Responsive font size */
-            text-shadow: 0 0 8px var(--hacker-blue);
-            animation: glitch 1s linear infinite alternate;
-            word-wrap: break-word; /* Prevent overflow on small screens */
-        }
-
-        @keyframes glitch {
-            0% { text-shadow: 0 0 8px var(--hacker-blue); transform: skew(0deg); }
-            20% { text-shadow: 0 0 8px var(--hacker-blue), 2px 2px 0 var(--hacker-red); transform: skew(5deg); }
-            40% { text-shadow: 0 0 8px var(--hacker-blue), -2px -2px 0 var(--hacker-green); transform: skew(-5deg); }
-            60% { text-shadow: 0 0 8px var(--hacker-blue), 3px 0 0 var(--hacker-red); transform: skew(0deg); }
-            80% { text-shadow: 0 0 8px var(--hacker-blue), -3px 3px 0 var(--hacker-green); transform: skew(-3deg); }
-            100% { text-shadow: 0 0 8px var(--hacker-blue); transform: skew(0deg); }
-        }
-
-        .section-title {
-            color: var(--hacker-blue);
-            font-size: 1.1em; /* Responsive font size */
-            margin-top: 1.5rem; /* Responsive margin */
-            margin-bottom: 0.8rem; /* Responsive margin */
-            text-align: left;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            transform: translateY(0);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
             position: relative;
-            padding-left: 1rem; /* Responsive padding */
+            animation: flicker 1s infinite alternate;
         }
 
-        .section-title::before {
-            content: '>>';
+        @keyframes flicker {
+            0% { box-shadow: 0 0 20px var(--hacker-glow), inset 0 0 10px var(--hacker-light); }
+            100% { box-shadow: 0 0 22px var(--hacker-glow), inset 0 0 12px var(--hacker-light); }
+        }
+
+        .container::before {
+            content: '';
             position: absolute;
+            top: 0;
             left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 255, 0, 0.05),
+                rgba(0, 255, 0, 0.05) 1px,
+                transparent 1px,
+                transparent 8px
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        h1 {
             color: var(--hacker-green);
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.2em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px var(--hacker-glow);
+            border-bottom: 2px dashed var(--hacker-border);
+            padding-bottom: 15px;
         }
 
         .input-group {
-            margin-bottom: 1.2rem; /* Responsive margin */
+            margin-bottom: 25px;
+            text-align: left;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 0.5rem; /* Responsive margin */
-            color: var(--hacker-blue);
-            text-shadow: 0 0 5px var(--hacker-blue);
-            font-size: 0.95em;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--hacker-text);
+            font-size: 1.1em;
+            text-shadow: 0 0 3px var(--hacker-glow);
         }
 
-        input[type="text"] {
-            width: calc(100% - 1.5rem); /* Responsive width (padding + border) */
-            padding: 0.8rem; /* Responsive padding */
-            border: 1px solid var(--hacker-green);
-            background-color: var(--hacker-darker);
-            color: var(--hacker-green);
-            font-family: 'VT323', monospace;
-            font-size: 1em; /* Responsive font size */
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--hacker-border);
             border-radius: 4px;
-            box-shadow: inset 0 0 5px var(--hacker-green);
-            transition: border-color 0.2s, box-shadow 0.2s;
-            box-sizing: border-box; /* Include padding and border in width */
+            font-size: 1em;
+            color: var(--hacker-text);
+            background-color: var(--hacker-medium);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
+            box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.2);
+            text-shadow: 0 0 3px var(--hacker-glow);
         }
 
-        input[type="text"]:focus {
+        .input-group input[type="text"]:focus {
+            border-color: var(--hacker-green);
+            box-shadow: 0 0 15px var(--hacker-glow), inset 0 0 8px rgba(0, 255, 0, 0.4);
             outline: none;
-            border-color: var(--hacker-blue);
-            box-shadow: inset 0 0 8px var(--hacker-blue), 0 0 5px var(--hacker-blue);
         }
 
         button {
-            background-color: transparent;
-            border: 2px solid var(--hacker-green);
+            background-color: var(--hacker-light);
             color: var(--hacker-green);
-            padding: 0.8rem 1.5rem; /* Responsive padding */
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.8em; /* Responsive font size */
+            padding: 15px 30px;
+            border: 2px solid var(--hacker-green);
+            border-radius: 4px;
+            font-size: 1.15em;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 0 10px var(--hacker-green);
-            text-shadow: 0 0 5px var(--hacker-green);
-            margin-top: 0.8rem; /* Responsive margin */
-            min-width: 150px; /* Ensure buttons are large enough for touch */
-            min-height: 44px; /* Apple's Human Interface Guidelines for touch targets */
-            box-sizing: border-box;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px var(--hacker-glow);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 0 5px var(--hacker-glow);
         }
 
         button:hover {
             background-color: var(--hacker-green);
-            color: var(--hacker-darker);
-            box-shadow: 0 0 20px var(--hacker-blue), 0 0 30px var(--hacker-green);
-            transform: scale(1.05);
+            color: var(--hacker-dark);
+            box-shadow: 0 0 20px var(--hacker-green);
+            transform: translateY(-2px) scale(1.02);
         }
 
         button:active {
-            transform: scale(0.98);
+            transform: translateY(0);
             box-shadow: 0 0 5px var(--hacker-green);
         }
 
-        .output-console {
-            background-color: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--hacker-grey);
-            padding: 1rem; /* Responsive padding */
-            min-height: 100px; /* Min height for visibility */
-            max-height: 250px; /* Max height to prevent overflowing screen */
-            overflow-y: auto;
-            margin-top: 1.5rem; /* Responsive margin */
-            border-radius: 4px;
-            font-size: 0.95em; /* Responsive font size */
-            line-height: 1.4;
-            box-shadow: inset 0 0 5px var(--hacker-grey);
-            word-wrap: break-word; /* Ensure text wraps */
-        }
-
-        .output-line {
-            white-space: pre-wrap; /* Preserve line breaks and spaces */
-            word-break: break-all; /* Break long words */
-            color: var(--hacker-green);
-            animation: textFadeIn 0.3s forwards;
-            position: relative;
-            padding-left: 1rem; /* Responsive padding */
-            margin-bottom: 0.2rem; /* Small spacing between lines */
-        }
-        .output-line::before {
-            content: '$ ';
-            position: absolute;
-            left: 0;
-            color: var(--hacker-blue);
-        }
-
-        .output-line.error { color: var(--hacker-red); }
-        .output-line.info { color: var(--hacker-blue); }
-        .output-line.success { color: #00ff00; }
-        .output-line.action { color: yellow; }
-
-        @keyframes textFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        #generatedLinkDisplay {
-            margin-top: 1.5rem; /* Responsive margin */
-            padding: 0.8rem; /* Responsive padding */
-            border: 1px dashed var(--hacker-blue);
-            background-color: rgba(0, 255, 255, 0.05);
-            text-align: center;
-            font-size: 1.1em; /* Responsive font size */
-            box-shadow: 0 0 8px var(--hacker-blue);
-            animation: neonPulse 1.5s infinite alternate;
+        .result-box {
+            margin-top: 35px;
+            padding: 25px;
+            background-color: var(--hacker-dark);
+            border: 1px dashed var(--hacker-border);
+            border-radius: 6px;
+            text-align: left;
             word-wrap: break-word;
+            display: none; /* Hidden by default */
+            box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.2);
+            animation: fadeIn 0.5s ease-out;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes neonPulse {
-            from { box-shadow: 0 0 8px var(--hacker-blue); }
-            to { box-shadow: 0 0 15px var(--hacker-blue), 0 0 25px var(--hacker-blue); }
+        .result-box::before {
+            content: '>>>';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: var(--hacker-green);
+            font-weight: bold;
+            animation: typing 1s steps(3, end) infinite;
         }
 
-        #generatedLinkDisplay a {
-            color: var(--hacker-blue);
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box p {
+            font-size: 1.05em;
+            color: var(--hacker-text);
+            margin-bottom: 10px;
+            padding-left: 30px; /* Make space for >>> */
+        }
+
+        #displayedLink {
+            color: var(--hacker-green);
             text-decoration: none;
+            font-weight: 600;
             cursor: pointer;
-            text-shadow: 0 0 5px var(--hacker-blue);
-            display: block; /* Ensure the whole block is clickable */
-            padding: 0.2rem; /* Make clickable area larger */
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: var(--hacker-light);
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 8px rgba(0, 255, 0, 0.2);
+            text-shadow: 0 0 3px var(--hacker-glow);
+            margin-left: 30px; /* Align with p tag */
         }
 
-        #generatedLinkDisplay a:hover {
-            color: var(--hacker-green);
-            text-shadow: 0 0 8px var(--hacker-green);
+        #displayedLink:hover {
+            background-color: var(--hacker-green);
+            color: var(--hacker-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 0 15px var(--hacker-green);
         }
 
-        /* ASCII Art */
-        .ascii-art {
-            font-family: 'Press Start 2P', cursive;
-            font-size: 0.6em; /* Smaller for mobile */
-            color: var(--hacker-green);
-            text-shadow: 0 0 5px var(--hacker-green);
-            white-space: pre;
-            margin-top: 1rem;
-            animation: textFlicker 0.1s infinite alternate;
-            text-align: center;
-            line-height: 0.8;
-            letter-spacing: -1px; /* For dense ASCII art */
-            overflow-x: auto; /* Allow horizontal scroll for wide ASCII on small screens */
-            padding-bottom: 5px; /* Space for scrollbar */
+        #displayedLink:active {
+            transform: translateY(0);
+            box-shadow: 0 0 5px var(--hacker-green);
         }
 
-        @keyframes textFlicker {
-            0% { opacity: 1; }
-            50% { opacity: 0.9; }
-            100% { opacity: 1; }
+        .error-message {
+            color: var(--hacker-error);
+            margin-top: 15px;
+            font-size: 0.9em;
+            display: none;
+            text-shadow: 0 0 5px rgba(255, 0, 0, 0.5);
         }
 
-        /* Deterrence (Optional) - CSS part */
+        /* Deterrence measures (optional) */
         body.no-context-menu {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -273,203 +234,68 @@
             -ms-user-select: none;
             user-select: none;
         }
-
-        /* Scroller visual */
-        ::-webkit-scrollbar {
-            width: 8px;
-            height: 8px; /* For horizontal scrollbar */
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--hacker-darker);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--hacker-green);
-            border-radius: 10px;
-            box-shadow: 0 0 5px var(--hacker-green);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--hacker-blue);
-            box-shadow: 0 0 8px var(--hacker-blue);
-        }
-
-        /* Media Queries for Responsiveness */
-        @media (min-width: 600px) {
-            .terminal-header {
-                font-size: 1.5em; /* Larger on wider screens */
-            }
-            .section-title {
-                font-size: 1.3em;
-            }
-            .ascii-art {
-                font-size: 0.7em; /* Slightly larger on wider screens */
-                letter-spacing: -2px;
-            }
-            input[type="text"] {
-                padding: 1rem;
-                font-size: 1.1em;
-            }
-            button {
-                padding: 12px 25px;
-                font-size: 0.9em;
-            }
-            .output-console {
-                padding: 1.5rem;
-                font-size: 1em;
-            }
-            #generatedLinkDisplay {
-                padding: 1rem;
-                font-size: 1.2em;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="terminal-window">
-        <div class="terminal-header">
-            TEMU_OPS_TERMINAL
-        </div>
-
-        <div class="ascii-art" id="asciiArt">
-            <span style="color: var(--hacker-blue);">
- _    _ ______ _    _ _  __
-| |  | |  ____| |  | | |/ /
-| |__| | |__  | |__| | ' / 
-|  __  |  __| |  __  |  <  
-| |  | | |____| |  | | . \ 
-|_|  |_|______|_|  |_|_|\_\
-            </span>
-        </div>
-
-        <div class="section-title">Manual Goods ID Injection</div>
+    <div class="container" id="mainContent">
+        <h1>/// TEMU DECRYPTION PROTOCOL ///</h1>
         <div class="input-group">
-            <label for="manualGoodsIdInput">ENTER_GOODS_ID:</label>
-            <input type="text" id="manualGoodsIdInput" placeholder="> 601099516750973">
+            <label for="goodsIdInput">INPUT: GOODS_ID_STRING</label>
+            <input type="text" id="goodsIdInput" placeholder="/// ENTER TEMU GOODS ID (e.g., 601099516750973) ///">
         </div>
-        <button id="generateManualButton">EXECUTE_MANUAL_LINK_GEN</button>
-
-        <div class="section-title">Share Link Extraction Protocol</div>
-        <div class="input-group">
-            <label for="shareLinkInput">PASTE_SHARE_LINK:</label>
-            <input type="text" id="shareLinkInput" placeholder="> https://share.temu.com/dt2Sb0ZJGGA">
+        <button id="generateButton">INITIATE DECRYPTION</button>
+        <div class="error-message" id="errorMessage">
+            ERROR: INVALID INPUT. RECALIBRATE IDENTIFIER.
         </div>
-        <button id="extractShareIdButton">INITIATE_SHARE_ID_SCAN</button>
-        <div id="extractedGoodsIdDisplay" style="display:none; margin-top:1.2rem;" class="output-line success">
-            Extracted Goods ID: <span id="extractedIdValue"></span>
-        </div>
-
-        <div class="section-title">Operational Log</div>
-        <div class="output-console" id="outputConsole">
-            <div class="output-line info">$ Initializing Temu_Ops_Terminal...</div>
-            <div class="output-line success">$ System operational. Awaiting command.</div>
-        </div>
-
-        <div class="section-title">Generated Output</div>
-        <div id="generatedLinkDisplay" style="display:none;">
-            <a href="#" id="displayedLink">ACCESS_SECURED_TEMU_GATEWAY</a>
+        <div class="result-box" id="resultBox">
+            <p><strong>>>> DECRYPTION COMPLETE. SECURE REDIRECT INITIATED:</strong></p>
+            <a href="#" id="displayedLink">/// ACCESS SECURE TEMU CHANNEL ///</a>
         </div>
     </div>
 
     <script>
-        // Wrap all JavaScript code in a DOMContentLoaded listener
-        document.addEventListener('DOMContentLoaded', function() {
-            const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
-            const manualGoodsIdInput = document.getElementById('manualGoodsIdInput');
-            const generateManualButton = document.getElementById('generateManualButton');
-            const shareLinkInput = document.getElementById('shareLinkInput');
-            const extractShareIdButton = document.getElementById('extractShareIdButton');
-            const extractedGoodsIdDisplay = document.getElementById('extractedGoodsIdDisplay');
-            const extractedIdValue = document.getElementById('extractedIdValue');
-            const outputConsole = document.getElementById('outputConsole');
-            const displayedLinkElement = document.getElementById('displayedLink');
-            const generatedLinkDisplay = document.getElementById('generatedLinkDisplay');
+        const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
+        const goodsIdInput = document.getElementById('goodsIdInput');
+        const generateButton = document.getElementById('generateButton');
+        const displayedLinkElement = document.getElementById('displayedLink');
+        const resultBox = document.getElementById('resultBox');
+        const errorMessage = document.getElementById('errorMessage');
 
-            // --- Console Logger ---
-            function logToConsole(message, type = 'info') {
-                const line = document.createElement('div');
-                line.classList.add('output-line', type);
-                line.textContent = message;
-                outputConsole.appendChild(line);
-                outputConsole.scrollTop = outputConsole.scrollHeight; // Auto-scroll to bottom
-                console.log(`[CONSOLE ${type.toUpperCase()}]: ${message}`); // Debugging to browser console
+        generateButton.addEventListener('click', function() {
+            const newGoodsId = goodsIdInput.value.trim();
+
+            if (newGoodsId) {
+                errorMessage.style.display = 'none'; // Hide error if present
+                const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
+
+                // Encode the actual Temu link to be passed as a URL parameter to secure.html
+                const encodedTemuLink = encodeURIComponent(actualTemuLink);
+
+                // The link displayed and clicked will now point to secure.html
+                const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
+
+                displayedLinkElement.textContent = `/// ACCESS TEMU OFFER FOR ID: ${newGoodsId} ///`;
+                displayedLinkElement.href = intermediaryLink;
+
+                resultBox.style.display = 'block';
+                resultBox.style.animation = 'none';
+                void resultBox.offsetWidth;
+                resultBox.style.animation = 'fadeIn 0.5s ease-out';
+
+            } else {
+                errorMessage.style.display = 'block'; // Show error message
+                resultBox.style.display = 'none';
             }
+        });
 
-            // --- Manual Goods ID Generator ---
-            generateManualButton.addEventListener('click', function() {
-                console.log("Manual Generate button clicked."); // Debugging log
-                logToConsole('Processing manual input...', 'info');
-                const newGoodsId = manualGoodsIdInput.value.trim();
-                logToConsole(`Attempting manual link generation for ID: ${newGoodsId || '[EMPTY]'}`, 'action');
-
-                if (newGoodsId) {
-                    const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
-                    const encodedTemuLink = encodeURIComponent(actualTemuLink);
-                    const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
-
-                    displayedLinkElement.textContent = `INITIATE_PROTOCOL_FOR_${newGoodsId}`;
-                    displayedLinkElement.href = intermediaryLink;
-                    generatedLinkDisplay.style.display = 'block';
-                    logToConsole(`SUCCESS: Manual link generated. Access: ${displayedLinkElement.textContent}`, 'success');
-                } else {
-                    logToConsole('ERROR: Goods ID field cannot be empty. Aborting.', 'error');
-                    generatedLinkDisplay.style.display = 'none';
-                }
-            });
-
-            // --- Share Link Extractor ---
-            extractShareIdButton.addEventListener('click', async function() {
-                console.log("Share Link Extract button clicked."); // Debugging log
-                logToConsole('Initiating share link scan protocol...', 'info');
-                const shareLink = shareLinkInput.value.trim();
-                logToConsole(`Target share link: ${shareLink || '[EMPTY]'}`, 'action');
-                extractedGoodsIdDisplay.style.display = 'none';
-                extractedIdValue.textContent = '';
-                generatedLinkDisplay.style.display = 'none';
-
-                if (!shareLink) {
-                    logToConsole('ERROR: Share Link field cannot be empty. Aborting scan.', 'error');
-                    return;
-                }
-
-                if (!shareLink.startsWith('https://share.temu.com/')) {
-                    logToConsole('ERROR: Invalid Temu Share Link format. Must start with https://share.temu.com/', 'error');
-                    return;
-                }
-
-                logToConsole('STATUS: Attempting to fetch share link data.', 'info');
-                logToConsole('WARNING: Direct client-side fetch will likely fail due to CORS. A server-side proxy is REQUIRED for real-world functionality.', 'error'); // More explicit warning
-
-                try {
-                    // IMPORTANT: Replace this with your actual server-side proxy endpoint
-                    // For local testing without a proxy, you might need to run Chrome with --disable-web-security flag
-                    // (NOT recommended for normal Browse).
-                    // Example for a real proxy:
-                    // const response = await fetch(`YOUR_PROXY_SERVER_URL/proxy?url=${encodeURIComponent(shareLink)}`);
-                    // const htmlContent = await response.text();
-
-                    // --- SIMULATED PROXY FETCH (FOR CLIENT-SIDE DEMO ONLY) ---
-                    // This simulates the HTML content you *would* get from a proxy.
-                    // Replace this with the actual fetch call to your proxy server.
-                    logToConsole('SIMULATION: Fetching simulated Temu share page content...', 'info');
-                    const simulatedHtmlContent = `
-                        <html>
-                        <head>
-                            <title>Temu Share - Product</title>
-                            <meta property="og:url" content="https://www.temu.com/goods_id=601099516750973"/>
-                            <meta property="og:description" content="Check out this amazing deal!"/>
-                            <script>
-                                // Temu might embed JSON-LD or global JS variables with product data
-                                var initialProps = JSON.parse('{"goods_id":"987654321098765","item_id":"someitem"}');
-                                window.location.href = "https://www.temu.com/redirect?from_share&goods_id=789012345678901&item_id=anotheritem";
-                            </script>
-                        </head>
-                        <body>
-                            <div id="product-data" data-goodsid="123456789012345"></div>
-                        </body>
-                        </html>
-                    `;
-                    logToConsole('SIMULATION: Content received. Parsing...', 'info');
-
-                    let goodsId = null;
-
-                    // -
+        // Deterrence measures (optional, easily bypassed)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        document.body.classList.add('no-context-menu');
+    </script>
+</body>
+</html>
