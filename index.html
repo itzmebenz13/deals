@@ -371,109 +371,105 @@
     </div>
 
     <script>
-        const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
-        const manualGoodsIdInput = document.getElementById('manualGoodsIdInput');
-        const generateManualButton = document.getElementById('generateManualButton');
-        const shareLinkInput = document.getElementById('shareLinkInput');
-        const extractShareIdButton = document.getElementById('extractShareIdButton');
-        const extractedGoodsIdDisplay = document.getElementById('extractedGoodsIdDisplay');
-        const extractedIdValue = document.getElementById('extractedIdValue');
-        const outputConsole = document.getElementById('outputConsole');
-        const displayedLinkElement = document.getElementById('displayedLink');
-        const generatedLinkDisplay = document.getElementById('generatedLinkDisplay');
+        // Wrap all JavaScript code in a DOMContentLoaded listener
+        document.addEventListener('DOMContentLoaded', function() {
+            const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
+            const manualGoodsIdInput = document.getElementById('manualGoodsIdInput');
+            const generateManualButton = document.getElementById('generateManualButton');
+            const shareLinkInput = document.getElementById('shareLinkInput');
+            const extractShareIdButton = document.getElementById('extractShareIdButton');
+            const extractedGoodsIdDisplay = document.getElementById('extractedGoodsIdDisplay');
+            const extractedIdValue = document.getElementById('extractedIdValue');
+            const outputConsole = document.getElementById('outputConsole');
+            const displayedLinkElement = document.getElementById('displayedLink');
+            const generatedLinkDisplay = document.getElementById('generatedLinkDisplay');
 
-        // --- Console Logger ---
-        function logToConsole(message, type = 'info') {
-            const line = document.createElement('div');
-            line.classList.add('output-line', type);
-            line.textContent = message;
-            outputConsole.appendChild(line);
-            outputConsole.scrollTop = outputConsole.scrollHeight; // Auto-scroll to bottom
-            console.log(`[CONSOLE ${type.toUpperCase()}]: ${message}`); // Debugging to browser console
-        }
+            // --- Console Logger ---
+            function logToConsole(message, type = 'info') {
+                const line = document.createElement('div');
+                line.classList.add('output-line', type);
+                line.textContent = message;
+                outputConsole.appendChild(line);
+                outputConsole.scrollTop = outputConsole.scrollHeight; // Auto-scroll to bottom
+                console.log(`[CONSOLE ${type.toUpperCase()}]: ${message}`); // Debugging to browser console
+            }
 
-        // --- Manual Goods ID Generator ---
-        generateManualButton.addEventListener('click', function() {
-            console.log("Manual Generate button clicked."); // Debugging log
-            logToConsole('Processing manual input...', 'info');
-            const newGoodsId = manualGoodsIdInput.value.trim();
-            logToConsole(`Attempting manual link generation for ID: ${newGoodsId || '[EMPTY]'}`, 'action');
+            // --- Manual Goods ID Generator ---
+            generateManualButton.addEventListener('click', function() {
+                console.log("Manual Generate button clicked."); // Debugging log
+                logToConsole('Processing manual input...', 'info');
+                const newGoodsId = manualGoodsIdInput.value.trim();
+                logToConsole(`Attempting manual link generation for ID: ${newGoodsId || '[EMPTY]'}`, 'action');
 
-            if (newGoodsId) {
-                const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
-                const encodedTemuLink = encodeURIComponent(actualTemuLink);
-                const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
+                if (newGoodsId) {
+                    const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
+                    const encodedTemuLink = encodeURIComponent(actualTemuLink);
+                    const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
 
-                displayedLinkElement.textContent = `INITIATE_PROTOCOL_FOR_${newGoodsId}`;
-                displayedLinkElement.href = intermediaryLink;
-                generatedLinkDisplay.style.display = 'block';
-                logToConsole(`SUCCESS: Manual link generated. Access: ${displayedLinkElement.textContent}`, 'success');
-            } else {
-                logToConsole('ERROR: Goods ID field cannot be empty. Aborting.', 'error');
+                    displayedLinkElement.textContent = `INITIATE_PROTOCOL_FOR_${newGoodsId}`;
+                    displayedLinkElement.href = intermediaryLink;
+                    generatedLinkDisplay.style.display = 'block';
+                    logToConsole(`SUCCESS: Manual link generated. Access: ${displayedLinkElement.textContent}`, 'success');
+                } else {
+                    logToConsole('ERROR: Goods ID field cannot be empty. Aborting.', 'error');
+                    generatedLinkDisplay.style.display = 'none';
+                }
+            });
+
+            // --- Share Link Extractor ---
+            extractShareIdButton.addEventListener('click', async function() {
+                console.log("Share Link Extract button clicked."); // Debugging log
+                logToConsole('Initiating share link scan protocol...', 'info');
+                const shareLink = shareLinkInput.value.trim();
+                logToConsole(`Target share link: ${shareLink || '[EMPTY]'}`, 'action');
+                extractedGoodsIdDisplay.style.display = 'none';
+                extractedIdValue.textContent = '';
                 generatedLinkDisplay.style.display = 'none';
-            }
-        });
 
-        // --- Share Link Extractor ---
-        extractShareIdButton.addEventListener('click', async function() {
-            console.log("Share Link Extract button clicked."); // Debugging log
-            logToConsole('Initiating share link scan protocol...', 'info');
-            const shareLink = shareLinkInput.value.trim();
-            logToConsole(`Target share link: ${shareLink || '[EMPTY]'}`, 'action');
-            extractedGoodsIdDisplay.style.display = 'none';
-            extractedIdValue.textContent = '';
-            generatedLinkDisplay.style.display = 'none';
+                if (!shareLink) {
+                    logToConsole('ERROR: Share Link field cannot be empty. Aborting scan.', 'error');
+                    return;
+                }
 
-            if (!shareLink) {
-                logToConsole('ERROR: Share Link field cannot be empty. Aborting scan.', 'error');
-                return;
-            }
+                if (!shareLink.startsWith('https://share.temu.com/')) {
+                    logToConsole('ERROR: Invalid Temu Share Link format. Must start with https://share.temu.com/', 'error');
+                    return;
+                }
 
-            if (!shareLink.startsWith('https://share.temu.com/')) {
-                logToConsole('ERROR: Invalid Temu Share Link format. Must start with https://share.temu.com/', 'error');
-                return;
-            }
+                logToConsole('STATUS: Attempting to fetch share link data.', 'info');
+                logToConsole('WARNING: Direct client-side fetch will likely fail due to CORS. A server-side proxy is REQUIRED for real-world functionality.', 'error'); // More explicit warning
 
-            logToConsole('STATUS: Attempting to fetch share link data.', 'info');
-            logToConsole('WARNING: Direct client-side fetch will likely fail due to CORS. A server-side proxy is REQUIRED for real-world functionality.', 'error'); // More explicit warning
+                try {
+                    // IMPORTANT: Replace this with your actual server-side proxy endpoint
+                    // For local testing without a proxy, you might need to run Chrome with --disable-web-security flag
+                    // (NOT recommended for normal Browse).
+                    // Example for a real proxy:
+                    // const response = await fetch(`YOUR_PROXY_SERVER_URL/proxy?url=${encodeURIComponent(shareLink)}`);
+                    // const htmlContent = await response.text();
 
-            try {
-                // IMPORTANT: Replace this with your actual server-side proxy endpoint
-                // For local testing without a proxy, you might need to run Chrome with --disable-web-security flag
-                // (NOT recommended for normal Browse).
-                // Example for a real proxy:
-                // const response = await fetch(`YOUR_PROXY_SERVER_URL/proxy?url=${encodeURIComponent(shareLink)}`);
-                // const htmlContent = await response.text();
+                    // --- SIMULATED PROXY FETCH (FOR CLIENT-SIDE DEMO ONLY) ---
+                    // This simulates the HTML content you *would* get from a proxy.
+                    // Replace this with the actual fetch call to your proxy server.
+                    logToConsole('SIMULATION: Fetching simulated Temu share page content...', 'info');
+                    const simulatedHtmlContent = `
+                        <html>
+                        <head>
+                            <title>Temu Share - Product</title>
+                            <meta property="og:url" content="https://www.temu.com/goods_id=601099516750973"/>
+                            <meta property="og:description" content="Check out this amazing deal!"/>
+                            <script>
+                                // Temu might embed JSON-LD or global JS variables with product data
+                                var initialProps = JSON.parse('{"goods_id":"987654321098765","item_id":"someitem"}');
+                                window.location.href = "https://www.temu.com/redirect?from_share&goods_id=789012345678901&item_id=anotheritem";
+                            </script>
+                        </head>
+                        <body>
+                            <div id="product-data" data-goodsid="123456789012345"></div>
+                        </body>
+                        </html>
+                    `;
+                    logToConsole('SIMULATION: Content received. Parsing...', 'info');
 
-                // --- SIMULATED PROXY FETCH (FOR CLIENT-SIDE DEMO ONLY) ---
-                // This simulates the HTML content you *would* get from a proxy.
-                // Replace this with the actual fetch call to your proxy server.
-                logToConsole('SIMULATION: Fetching simulated Temu share page content...', 'info');
-                const simulatedHtmlContent = `
-                    <html>
-                    <head>
-                        <title>Temu Share - Product</title>
-                        <meta property="og:url" content="https://www.temu.com/goods_id=601099516750973"/>
-                        <meta property="og:description" content="Check out this amazing deal!"/>
-                        <script>
-                            // Temu might embed JSON-LD or global JS variables with product data
-                            var initialProps = JSON.parse('{"goods_id":"987654321098765","item_id":"someitem"}');
-                            window.location.href = "https://www.temu.com/redirect?from_share&goods_id=789012345678901&item_id=anotheritem";
-                        </script>
-                    </head>
-                    <body>
-                        <div id="product-data" data-goodsid="123456789012345"></div>
-                    </body>
-                    </html>
-                `;
-                logToConsole('SIMULATION: Content received. Parsing...', 'info');
+                    let goodsId = null;
 
-                let goodsId = null;
-
-                // --- Parsing Logic (Try various patterns found in Temu share pages) ---
-                // Pattern 1: goods_id in initial or redirect URL (often within a script tag)
-                const urlInScriptMatch = simulatedHtmlContent.match(/goods_id=(\d+)/i);
-                if (urlInScriptMatch && urlInScriptMatch[1]) {
-                    goodsId = urlInScriptMatch[1];
-                    logToConsole(`MATCH: Goods ID found in URL pattern within content: ${goodsId}`, 'success');
-        
+                    // -
