@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>/// DATA TRANSFER IN PROGRESS ///</title>
+    <title>/// DATA TRANSFER INITIATED ///</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --hacker-green: #00ff00; /* Neon Green */
-            --hacker-dark: #1a1a1a; /* Dark background */
-            --hacker-medium: #333333; /* Slightly lighter dark */
-            --hacker-light: #004d00; /* Darker green for accents */
+            --hacker-dark: #121212; /* Deeper Dark background */
+            --hacker-medium: #2a2a2a; /* Slightly lighter dark */
+            --hacker-light: #006600; /* Darker green for accents */
             --hacker-text: #00ff00; /* Neon green text */
             --hacker-glow: rgba(0, 255, 0, 0.4); /* Green glow */
-            --hacker-border: #008000; /* Border green */
-            --hacker-error: #ff0000; /* Red for errors */
+            --hacker-border: #00a000; /* Border green */
+            --hacker-error: #ff3333; /* Brighter Red for errors */
         }
 
         body {
@@ -32,17 +32,17 @@
             padding: 20px;
             box-sizing: border-box;
             color: var(--hacker-text);
-            text-shadow: 0 0 5px var(--hacker-glow);
-            overflow: hidden; /* Prevent scrollbar from background */
+            text-shadow: 0 0 4px var(--hacker-glow);
+            overflow: hidden;
         }
 
         .loading-container {
             background-color: var(--hacker-dark);
             border: 2px solid var(--hacker-green);
-            box-shadow: 0 0 20px var(--hacker-glow), inset 0 0 10px var(--hacker-light);
-            padding: 50px;
+            box-shadow: 0 0 25px var(--hacker-glow), inset 0 0 12px var(--hacker-light);
+            padding: 40px; /* Slightly less padding */
             border-radius: 8px;
-            max-width: 500px;
+            max-width: 550px; /* Adjusted max-width */
             width: 100%;
             text-align: center;
             position: relative;
@@ -50,8 +50,8 @@
         }
 
         @keyframes flicker {
-            0% { box-shadow: 0 0 20px var(--hacker-glow), inset 0 0 10px var(--hacker-light); }
-            100% { box-shadow: 0 0 22px var(--hacker-glow), inset 0 0 12px var(--hacker-light); }
+            0% { box-shadow: 0 0 25px var(--hacker-glow), inset 0 0 12px var(--hacker-light); }
+            100% { box-shadow: 0 0 27px var(--hacker-glow), inset 0 0 14px var(--hacker-light); }
         }
 
         .loading-container::before {
@@ -85,14 +85,15 @@
         }
 
         p {
-            font-size: 1.1em;
-            margin-bottom: 30px;
+            font-size: 1.05em; /* Adjusted font size */
+            margin-bottom: 25px; /* Less margin */
             color: var(--hacker-text);
             text-shadow: 0 0 3px var(--hacker-glow);
-            overflow: hidden; /* For typing effect */
-            white-space: nowrap; /* For typing effect */
-            border-right: 2px solid var(--hacker-green); /* The blinking cursor */
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--hacker-green);
             animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+            display: inline-block; /* Essential for typing effect */
         }
 
         @keyframes typing {
@@ -106,8 +107,8 @@
         }
 
         .spinner-hacker {
-            font-size: 3em;
-            margin: 0 auto 30px;
+            font-size: 2.8em; /* Adjusted spinner size */
+            margin: 0 auto 25px; /* Adjusted margin */
             color: var(--hacker-green);
             text-shadow: 0 0 15px var(--hacker-glow);
             animation: spin-hacker 0.8s linear infinite;
@@ -125,16 +126,52 @@
         }
 
         .countdown {
-            font-size: 1.5em;
+            font-size: 1.4em; /* Adjusted countdown size */
             font-weight: 600;
             color: var(--hacker-green);
             text-shadow: 0 0 10px var(--hacker-glow);
             animation: pulse 1.5s infinite alternate;
+            margin-bottom: 25px; /* Added margin */
         }
 
         @keyframes pulse {
             0% { opacity: 0.8; transform: scale(1); }
             100% { opacity: 1; transform: scale(1.02); }
+        }
+
+        .final-link-container {
+            margin-top: 25px; /* Less margin */
+            display: none;
+        }
+
+        .final-link-container a {
+            display: inline-block;
+            background-color: var(--hacker-light);
+            color: var(--hacker-green);
+            padding: 12px 25px; /* Consistent padding */
+            border: 2px solid var(--hacker-green);
+            border-radius: 4px;
+            font-size: 1.05em; /* Consistent font size */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px var(--hacker-glow);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            text-shadow: 0 0 5px var(--hacker-glow);
+            text-decoration: none;
+        }
+
+        .final-link-container a:hover {
+            background-color: var(--hacker-green);
+            color: var(--hacker-dark);
+            box-shadow: 0 0 20px var(--hacker-green);
+            transform: translateY(-2px) scale(1.01);
+        }
+
+        .final-link-container a:active {
+            transform: translateY(0);
+            box-shadow: 0 0 5px var(--hacker-green);
         }
 
         .error-container {
@@ -143,7 +180,7 @@
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.3);
             padding: 40px;
             border-radius: 8px;
-            max-width: 500px;
+            max-width: 550px;
             width: 100%;
             text-align: center;
             color: var(--hacker-error);
@@ -168,7 +205,7 @@
             color: white;
         }
 
-        /* Deterrence measures (optional, easily bypassed) */
+        /* Deterrence measures (optional) */
         body.no-context-menu {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -185,6 +222,10 @@
         <div class="spinner-hacker" id="spinner">_</div>
         <p id="loadingMessage">PROCESSING TEMU DATA STREAM...</p>
         <p class="countdown" id="countdown">INITIATING REDIRECT IN: 3 SECONDS...</p>
+
+        <div class="final-link-container" id="finalLinkContainer">
+            <a href="#" id="finalRedirectLink" target="_blank">/// ACTIVATE DEAL PROTOCOL ///</a>
+        </div>
     </div>
 
     <script>
@@ -192,9 +233,11 @@
         const loadingMessageElement = document.getElementById('loadingMessage');
         const spinnerElement = document.getElementById('spinner');
         const mainContainer = document.getElementById('mainContainer');
-        let countdownTime = 3; // Seconds to wait
+        const finalLinkContainer = document.getElementById('finalLinkContainer');
+        const finalRedirectLink = document.getElementById('finalRedirectLink');
 
-        // Function to get a URL parameter by name
+        let countdownTime = 3;
+
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -202,17 +245,17 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         };
 
-        const targetUrl = getUrlParameter('url'); // Get the 'url' parameter from the URL
+        const targetUrl = getUrlParameter('url');
 
         if (targetUrl) {
+            finalRedirectLink.href = targetUrl;
+
             countdownElement.textContent = `INITIATING REDIRECT IN: ${countdownTime} SECONDS...`;
             loadingMessageElement.textContent = `PROCESSING TEMU DATA STREAM...`;
 
-            // Reset typing animation for loading message
             loadingMessageElement.style.animation = 'none';
-            void loadingMessageElement.offsetWidth; // Trigger reflow
+            void loadingMessageElement.offsetWidth;
             loadingMessageElement.style.animation = 'typing 2s steps(40, end), blink-caret .75s step-end infinite';
-
 
             const interval = setInterval(() => {
                 countdownTime--;
@@ -222,22 +265,18 @@
                 
                 if (countdownTime <= 0) {
                     clearInterval(interval);
-                    // Perform the actual redirection
-                    window.open(targetUrl, '_blank'); // Opens in a new tab/attempts app launch
-                    // If you want it to open in the same tab:
-                    // window.location.replace(targetUrl);
                     
-                    // Optional: Update message after redirection attempt
-                    loadingMessageElement.style.animation = 'none'; // Stop typing animation
-                    loadingMessageElement.style.borderRight = 'none'; // Hide cursor
-                    loadingMessageElement.textContent = `REDIRECT SIGNAL SENT. MONITORING CONNECTION...`;
-                    countdownElement.textContent = ``; // Clear countdown
-                    spinnerElement.textContent = '///'; // Change spinner to final state
-                    spinnerElement.style.animation = 'none'; // Stop spinner animation
+                    loadingMessageElement.style.animation = 'none';
+                    loadingMessageElement.style.borderRight = 'none';
+                    spinnerElement.style.animation = 'none';
+                    spinnerElement.textContent = '>>>';
+
+                    loadingMessageElement.textContent = `CHANNEL SECURED. LINK READY FOR ACTIVATION.`;
+                    countdownElement.textContent = ``;
+                    finalLinkContainer.style.display = 'block';
                 }
-            }, 1000); // Update every 1 second
+            }, 1000);
         } else {
-            // Handle case where no URL parameter is found (e.g., accessed directly)
             mainContainer.classList.remove('loading-container');
             mainContainer.classList.add('error-container');
             mainContainer.innerHTML = `
@@ -245,14 +284,12 @@
                 <p>ACCESS DENIED. REQUIRED PARAMETERS MISSING.</p>
                 <p>RETURN TO <a href="index.html">/// SOURCE INITIATOR ///</a>.</p>
             `;
-            // Remove spinner element if it exists in the error state
             const spinner = document.getElementById('spinner');
             if (spinner) {
                 spinner.remove();
             }
         }
 
-        // Deterrence measures (optional, easily bypassed)
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
