@@ -160,16 +160,14 @@
             transform: translateY(0);
         }
 
-        /* --- Measures to deter (not prevent) inspection/copy --- */
-        /* Apply these only if you explicitly want to deter casual users.
-           They do NOT stop determined users or developer tools. */
+        /* Deterrence measures (optional) */
         body.no-context-menu {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
     </style>
 </head>
@@ -182,39 +180,36 @@
         </div>
         <button id="generateButton">Generate Deal Link</button>
         <div class="result-box" id="resultBox">
-            <p><strong>Click to open in Temu app or browser:</strong></p>
+            <p><strong>Click to activate deal (redirecting via secure page):</strong></p>
             <a href="#" id="displayedLink">Click for Temu Deal!</a>
         </div>
     </div>
 
     <script>
-        // The original Temu universal link template
-        // This is a standard HTTPS link that Temu has likely configured
-        // as a universal link/deep link, meaning browsers will try to open the app first.
         const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
-
         const goodsIdInput = document.getElementById('goodsIdInput');
         const generateButton = document.getElementById('generateButton');
         const displayedLinkElement = document.getElementById('displayedLink');
         const resultBox = document.getElementById('resultBox');
 
-        let actualGeneratedLink = ''; // To store the real Temu link for redirection
-
         generateButton.addEventListener('click', function() {
             const newGoodsId = goodsIdInput.value.trim();
 
             if (newGoodsId) {
-                // Construct the actual Temu universal link
-                actualGeneratedLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
+                const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
 
-                // Display user-friendly, non-actual text
+                // Encode the actual Temu link to be passed as a URL parameter to secure.html
+                const encodedTemuLink = encodeURIComponent(actualTemuLink);
+
+                // The link displayed and clicked will now point to secure.html
+                const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
+
                 displayedLinkElement.textContent = `Activate Temu Offer for ID: ${newGoodsId}`;
-                displayedLinkElement.href = "#"; // Ensure the visible href is not the real URL
+                displayedLinkElement.href = intermediaryLink; // This is the link to secure.html
 
-                // Show the result box with animation
                 resultBox.style.display = 'block';
-                resultBox.style.animation = 'none'; // Reset animation for re-triggering
-                void resultBox.offsetWidth; // Trigger reflow
+                resultBox.style.animation = 'none';
+                void resultBox.offsetWidth;
                 resultBox.style.animation = 'fadeIn 0.5s ease-out';
 
             } else {
@@ -223,31 +218,17 @@
             }
         });
 
-        // Handle the click on the displayed "fake" link
-        displayedLinkElement.addEventListener('click', function(event) {
-            event.preventDefault(); // Crucially, prevent the default '#' navigation
+        // The click event listener on displayedLinkElement no longer prevents default,
+        // as we want it to actually navigate to secure.html
+        // The default link behavior will now handle navigating to secure.html
 
-            if (actualGeneratedLink) {
-                // Attempt to open the universal link.
-                // Browsers supporting universal links/deep links will try the app first.
-                // If the app is not installed, it will fall back to opening in the browser.
-                window.open(actualGeneratedLink, '_blank');
-            } else {
-                alert('Please generate a link first by entering a Goods ID.');
-            }
-        });
-
-        // --- GLOBAL DETERRENCE MEASURES (Optional, can be removed) ---
-        // These make the entire page less prone to right-clicks and selection for casual users.
-        // They are NOT security measures and are easily bypassed.
+        // Deterrence measures (optional, easily bypassed)
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
-
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
         });
-
         document.body.classList.add('no-context-menu');
     </script>
 </body>
