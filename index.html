@@ -3,164 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temu Deal Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>/// TERMINAL: Temu_Link_Ops_v3.1 ///</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #f75424; /* Temu-like orange */
-            --secondary-color: #ff914d;
-            --text-color: #333;
-            --background-light: #fdfdfd;
-            --background-dark: #e0e0e0;
-            --card-background: #ffffff;
-            --shadow-light: rgba(0, 0, 0, 0.08);
-            --shadow-medium: rgba(0, 0, 0, 0.15);
-            --border-color: #ddd;
+            --hacker-green: #00ff00;
+            --hacker-blue: #00ffff;
+            --hacker-dark: #1a1a1a;
+            --hacker-darker: #0d0d0d;
+            --hacker-grey: #666;
+            --hacker-red: #ff0000;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'VT323', monospace;
+            background-color: var(--hacker-darker);
+            color: var(--hacker-green);
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-dark) 100%);
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-            color: var(--text-color);
-        }
-
-        .container {
-            background-color: var(--card-background);
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px var(--shadow-medium);
-            text-align: center;
-            width: 100%;
-            max-width: 600px;
-            box-sizing: border-box;
-            transform: translateY(0);
-            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            overflow: hidden; /* For scanline effect */
             position: relative;
         }
 
-        .container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px var(--shadow-medium);
+        /* Scanline Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 1px,
+                rgba(0, 255, 0, 0.05) 1px,
+                rgba(0, 255, 0, 0.05) 2px
+            );
+            z-index: -1;
+            animation: scanlines 1s linear infinite;
         }
 
-        h1 {
-            color: var(--primary-color);
-            margin-bottom: 30px;
-            font-weight: 600;
-            font-size: 2.2em;
-            letter-spacing: -0.5px;
+        @keyframes scanlines {
+            from { background-position: 0 0; }
+            to { background-position: 0 50px; }
+        }
+
+        /* Terminal Container */
+        .terminal-window {
+            background-color: var(--hacker-dark);
+            border: 2px solid var(--hacker-green);
+            box-shadow: 0 0 15px var(--hacker-green), inset 0 0 10px var(--hacker-green);
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 800px;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .terminal-header {
+            font-family: 'Press Start 2P', cursive;
+            color: var(--hacker-blue);
+            text-align: center;
+            margin-bottom: 25px;
+            font-size: 1.5em;
+            text-shadow: 0 0 8px var(--hacker-blue);
+            animation: glitch 1s linear infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0 0 8px var(--hacker-blue); transform: skew(0deg); }
+            20% { text-shadow: 0 0 8px var(--hacker-blue), 2px 2px 0 var(--hacker-red); transform: skew(5deg); }
+            40% { text-shadow: 0 0 8px var(--hacker-blue), -2px -2px 0 var(--hacker-green); transform: skew(-5deg); }
+            60% { text-shadow: 0 0 8px var(--hacker-blue), 3px 0 0 var(--hacker-red); transform: skew(0deg); }
+            80% { text-shadow: 0 0 8px var(--hacker-blue), -3px 3px 0 var(--hacker-green); transform: skew(-3deg); }
+            100% { text-shadow: 0 0 8px var(--hacker-blue); transform: skew(0deg); }
+        }
+
+        .section-title {
+            color: var(--hacker-blue);
+            font-size: 1.3em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            text-align: left;
+            position: relative;
+            padding-left: 15px;
+        }
+
+        .section-title::before {
+            content: '>>';
+            position: absolute;
+            left: 0;
+            color: var(--hacker-green);
         }
 
         .input-group {
-            margin-bottom: 25px;
-            text-align: left;
+            margin-bottom: 20px;
         }
 
         .input-group label {
             display: block;
-            margin-bottom: 10px;
-            font-weight: 500;
-            color: var(--text-color);
+            margin-bottom: 8px;
+            color: var(--hacker-blue);
+            text-shadow: 0 0 5px var(--hacker-blue);
+        }
+
+        input[type="text"] {
+            width: calc(100% - 22px); /* Account for padding + border */
+            padding: 10px;
+            border: 1px solid var(--hacker-green);
+            background-color: var(--hacker-darker);
+            color: var(--hacker-green);
+            font-family: 'VT323', monospace;
             font-size: 1.1em;
+            border-radius: 4px;
+            box-shadow: inset 0 0 5px var(--hacker-green);
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .input-group input[type="text"] {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1em;
-            color: var(--text-color);
-            background-color: #f9f9f9;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-            box-sizing: border-box;
-        }
-
-        .input-group input[type="text"]:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(247, 84, 36, 0.2);
+        input[type="text"]:focus {
             outline: none;
+            border-color: var(--hacker-blue);
+            box-shadow: inset 0 0 8px var(--hacker-blue), 0 0 5px var(--hacker-blue);
         }
 
         button {
-            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.15em;
-            font-weight: 600;
+            background-color: transparent;
+            border: 2px solid var(--hacker-green);
+            color: var(--hacker-green);
+            padding: 12px 25px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.9em;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(247, 84, 36, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 0 10px var(--hacker-green);
+            text-shadow: 0 0 5px var(--hacker-green);
+            margin-top: 10px;
         }
 
         button:hover {
-            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
-            box-shadow: 0 8px 20px rgba(247, 84, 36, 0.4);
-            transform: translateY(-2px);
+            background-color: var(--hacker-green);
+            color: var(--hacker-darker);
+            box-shadow: 0 0 20px var(--hacker-blue), 0 0 30px var(--hacker-green);
+            transform: scale(1.05);
         }
 
         button:active {
-            transform: translateY(0);
-            box-shadow: 0 3px 10px rgba(247, 84, 36, 0.2);
+            transform: scale(0.98);
+            box-shadow: 0 0 5px var(--hacker-green);
         }
 
-        .result-box {
-            margin-top: 35px;
-            padding: 25px;
-            background-color: #f0f4f7;
-            border: 1px solid #cce7ff;
-            border-radius: 10px;
-            text-align: left;
-            word-wrap: break-word;
-            display: none; /* Hidden by default */
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
-            animation: fadeIn 0.5s ease-out;
+        .output-console {
+            background-color: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--hacker-grey);
+            padding: 15px;
+            min-height: 80px;
+            overflow-y: auto;
+            margin-top: 25px;
+            border-radius: 4px;
+            font-size: 1em;
+            line-height: 1.4;
+            box-shadow: inset 0 0 5px var(--hacker-grey);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .output-line {
+            white-space: pre-wrap; /* Preserve line breaks and spaces */
+            word-break: break-all; /* Break long words */
+            color: var(--hacker-green);
+            animation: textFadeIn 0.3s forwards;
+            position: relative;
+            padding-left: 15px;
+        }
+        .output-line::before {
+            content: '$ ';
+            position: absolute;
+            left: 0;
+            color: var(--hacker-blue);
         }
 
-        .result-box p {
-            font-size: 1.05em;
-            color: #555;
-            margin-bottom: 10px;
+        .output-line.error { color: var(--hacker-red); }
+        .output-line.info { color: var(--hacker-blue); }
+        .output-line.success { color: #00ff00; }
+        .output-line.action { color: yellow; }
+
+        @keyframes textFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
-        #displayedLink {
-            color: #007bff; /* A standard blue for links */
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            display: block; /* Make it block for better click area */
+        #generatedLinkDisplay {
+            margin-top: 15px;
             padding: 10px;
-            border-radius: 5px;
-            background-color: #e6f2ff;
-            transition: background-color 0.2s ease, transform 0.1s ease;
+            border: 1px dashed var(--hacker-blue);
+            background-color: rgba(0, 255, 255, 0.05);
+            text-align: center;
+            font-size: 1.1em;
+            box-shadow: 0 0 8px var(--hacker-blue);
+            animation: neonPulse 1.5s infinite alternate;
         }
 
-        #displayedLink:hover {
-            background-color: #d0e7ff;
-            transform: translateY(-1px);
+        @keyframes neonPulse {
+            from { box-shadow: 0 0 8px var(--hacker-blue); }
+            to { box-shadow: 0 0 15px var(--hacker-blue), 0 0 25px var(--hacker-blue); }
         }
 
-        #displayedLink:active {
-            transform: translateY(0);
+        #generatedLinkDisplay a {
+            color: var(--hacker-blue);
+            text-decoration: none;
+            cursor: pointer;
+            text-shadow: 0 0 5px var(--hacker-blue);
         }
 
-        /* Deterrence measures (optional) */
+        #generatedLinkDisplay a:hover {
+            color: var(--hacker-green);
+            text-shadow: 0 0 8px var(--hacker-green);
+        }
+
+        /* ASCII Art */
+        .ascii-art {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 0.7em;
+            color: var(--hacker-green);
+            text-shadow: 0 0 5px var(--hacker-green);
+            white-space: pre;
+            margin-top: 20px;
+            animation: textFlicker 0.1s infinite alternate;
+            text-align: center;
+            line-height: 0.8;
+            letter-spacing: -2px; /* For dense ASCII art */
+        }
+
+        @keyframes textFlicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.9; }
+            100% { opacity: 1; }
+        }
+
+        /* Deterrence (Optional) - CSS part */
         body.no-context-menu {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -169,66 +258,222 @@
             -ms-user-select: none;
             user-select: none;
         }
+
+        /* Scroller visual */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--hacker-darker);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--hacker-green);
+            border-radius: 10px;
+            box-shadow: 0 0 5px var(--hacker-green);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--hacker-blue);
+            box-shadow: 0 0 8px var(--hacker-blue);
+        }
     </style>
 </head>
 <body>
-    <div class="container" id="mainContent">
-        <h1>Temu App Deal Generator</h1>
-        <div class="input-group">
-            <label for="goodsIdInput">Goods ID:</label>
-            <input type="text" id="goodsIdInput" placeholder="Enter Temu Goods ID (e.g., 601099516750973)">
+    <div class="terminal-window">
+        <div class="terminal-header">
+            TEMU_OPS_TERMINAL
         </div>
-        <button id="generateButton">Generate Deal Link</button>
-        <div class="result-box" id="resultBox">
-            <p><strong>Click to activate deal (redirecting via secure page):</strong></p>
-            <a href="#" id="displayedLink">Click for Temu Deal!</a>
+
+        <div class="ascii-art" id="asciiArt">
+            <span style="color: var(--hacker-blue);">
+ _    _ ______ _    _ _  __
+| |  | |  ____| |  | | |/ /
+| |__| | |__  | |__| | ' / 
+|  __  |  __| |  __  |  <  
+| |  | | |____| |  | | . \ 
+|_|  |_|______|_|  |_|_|\_\
+            </span>
+        </div>
+
+        <div class="section-title">Manual Goods ID Injection</div>
+        <div class="input-group">
+            <label for="manualGoodsIdInput">ENTER_GOODS_ID:</label>
+            <input type="text" id="manualGoodsIdInput" placeholder="> 601099516750973">
+        </div>
+        <button id="generateManualButton">EXECUTE_MANUAL_LINK_GEN</button>
+
+        <div class="section-title">Share Link Extraction Protocol</div>
+        <div class="input-group">
+            <label for="shareLinkInput">PASTE_SHARE_LINK:</label>
+            <input type="text" id="shareLinkInput" placeholder="> https://share.temu.com/dt2Sb0ZJGGA">
+        </div>
+        <button id="extractShareIdButton">INITIATE_SHARE_ID_SCAN</button>
+        <div id="extractedGoodsIdDisplay" style="display:none; margin-top:15px;" class="output-line success">
+            Extracted Goods ID: <span id="extractedIdValue"></span>
+        </div>
+
+        <div class="section-title">Operational Log</div>
+        <div class="output-console" id="outputConsole">
+            <div class="output-line info">$ Initializing Temu_Ops_Terminal...</div>
+            <div class="output-line success">$ System operational. Awaiting command.</div>
+        </div>
+
+        <div class="section-title">Generated Output</div>
+        <div id="generatedLinkDisplay" style="display:none;">
+            <a href="#" id="displayedLink">ACCESS_SECURED_TEMU_GATEWAY</a>
         </div>
     </div>
 
     <script>
         const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
-        const goodsIdInput = document.getElementById('goodsIdInput');
-        const generateButton = document.getElementById('generateButton');
+        const manualGoodsIdInput = document.getElementById('manualGoodsIdInput');
+        const generateManualButton = document.getElementById('generateManualButton');
+        const shareLinkInput = document.getElementById('shareLinkInput');
+        const extractShareIdButton = document.getElementById('extractShareIdButton');
+        const extractedGoodsIdDisplay = document.getElementById('extractedGoodsIdDisplay');
+        const extractedIdValue = document.getElementById('extractedIdValue');
+        const outputConsole = document.getElementById('outputConsole');
         const displayedLinkElement = document.getElementById('displayedLink');
-        const resultBox = document.getElementById('resultBox');
+        const generatedLinkDisplay = document.getElementById('generatedLinkDisplay');
 
-        generateButton.addEventListener('click', function() {
-            const newGoodsId = goodsIdInput.value.trim();
+        // Function to append messages to the console
+        function logToConsole(message, type = 'info') {
+            const line = document.createElement('div');
+            line.classList.add('output-line', type);
+            line.textContent = message;
+            outputConsole.appendChild(line);
+            outputConsole.scrollTop = outputConsole.scrollHeight; // Auto-scroll to bottom
+        }
+
+        // --- Manual Goods ID Generator ---
+        generateManualButton.addEventListener('click', function() {
+            const newGoodsId = manualGoodsIdInput.value.trim();
+            logToConsole(`Attempting manual link generation for ID: ${newGoodsId}`, 'action');
 
             if (newGoodsId) {
                 const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
-
-                // Encode the actual Temu link to be passed as a URL parameter to secure.html
                 const encodedTemuLink = encodeURIComponent(actualTemuLink);
-
-                // The link displayed and clicked will now point to secure.html
                 const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
 
-                displayedLinkElement.textContent = `Activate Temu Offer for ID: ${newGoodsId}`;
-                displayedLinkElement.href = intermediaryLink; // This is the link to secure.html
-
-                resultBox.style.display = 'block';
-                resultBox.style.animation = 'none';
-                void resultBox.offsetWidth;
-                resultBox.style.animation = 'fadeIn 0.5s ease-out';
-
+                displayedLinkElement.textContent = `INITIATE_PROTOCOL_FOR_${newGoodsId}`;
+                displayedLinkElement.href = intermediaryLink;
+                generatedLinkDisplay.style.display = 'block';
+                logToConsole(`Manual link generated. Access: ${displayedLinkElement.textContent}`, 'success');
             } else {
-                alert('Please enter a Temu Goods ID to generate the deal link.');
-                resultBox.style.display = 'none';
+                logToConsole('ERROR: Goods ID field cannot be empty. Aborting.', 'error');
+                generatedLinkDisplay.style.display = 'none';
             }
         });
 
-        // The click event listener on displayedLinkElement no longer prevents default,
-        // as we want it to actually navigate to secure.html
-        // The default link behavior will now handle navigating to secure.html
+        // --- Share Link Extractor ---
+        extractShareIdButton.addEventListener('click', async function() {
+            const shareLink = shareLinkInput.value.trim();
+            logToConsole(`Initiating scan for share link: ${shareLink}`, 'action');
+            extractedGoodsIdDisplay.style.display = 'none';
+            extractedIdValue.textContent = '';
+            generatedLinkDisplay.style.display = 'none';
 
-        // Deterrence measures (optional, easily bypassed)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
+            if (!shareLink) {
+                logToConsole('ERROR: Share Link field cannot be empty. Aborting scan.', 'error');
+                return;
+            }
+
+            if (!shareLink.startsWith('https://share.temu.com/')) {
+                logToConsole('ERROR: Invalid Temu Share Link format. Must start with https://share.temu.com/', 'error');
+                return;
+            }
+
+            logToConsole('STATUS: Accessing share link data (requires proxy server for cross-origin).', 'info');
+            logToConsole('WARNING: Direct client-side fetch may fail due to CORS. Using a simulated proxy request for demonstration.', 'info');
+
+            try {
+                // IMPORTANT: In a real scenario, you'd use a server-side proxy here.
+                // Example: const response = await fetch(`/proxy?url=${encodeURIComponent(shareLink)}`);
+                // For this client-side demo, we'll simulate an immediate response
+                // or you'd need to manually disable CORS in your browser for local testing.
+
+                // --- SIMULATED PROXY FETCH (REPLACE WITH REAL PROXY FOR DEPLOYMENT) ---
+                // For demonstration, we'll just show the logic of ID extraction
+                // assuming you get the HTML content.
+                // A real fetch would look like:
+                // const response = await fetch(`YOUR_PROXY_SERVER_URL?url=${encodeURIComponent(shareLink)}`);
+                // const htmlContent = await response.text();
+
+                // Placeholder HTML content that a Temu share link might redirect to
+                // or contain in its meta tags/scripts. You'd need to inspect actual
+                // Temu share links to get the exact structure.
+                const simulatedHtmlContent = `
+                    <html>
+                    <head>
+                        <title>Temu Share</title>
+                        <meta property="og:url" content="https://www.temu.com/goods_id=601099516750973_share"/>
+                        <script>
+                            var goodsData = { goods_id: "789012345678901" };
+                            window.location.href = "https://www.temu.com/other_params&goods_id=987654321098765";
+                        </script>
+                    </head>
+                    <body>...</body>
+                    </html>
+                `;
+
+                // Attempt to extract goods_id using various patterns
+                let goodsId = null;
+
+                // Pattern 1: goods_id=XXXXX in the URL (most common after redirection)
+                const urlMatch = simulatedHtmlContent.match(/goods_id=(\d+)/);
+                if (urlMatch && urlMatch[1]) {
+                    goodsId = urlMatch[1];
+                    logToConsole(`SUCCESS: Goods ID found in URL pattern: ${goodsId}`, 'success');
+                }
+
+                // Pattern 2: From a JSON object or script variable (e.g., in <script> tags)
+                if (!goodsId) {
+                    const scriptMatch = simulatedHtmlContent.match(/goods_id:\s*["']?(\d+)["']?/);
+                    if (scriptMatch && scriptMatch[1]) {
+                        goodsId = scriptMatch[1];
+                        logToConsole(`SUCCESS: Goods ID found in script variable: ${goodsId}`, 'success');
+                    }
+                }
+
+                // Pattern 3: From a meta tag (less common for direct ID, but possible)
+                if (!goodsId) {
+                    const metaMatch = simulatedHtmlContent.match(/<meta[^>]*content="[^"]*goods_id=(\d+)[^"]*"[^>]*>/i);
+                    if (metaMatch && metaMatch[1]) {
+                        goodsId = metaMatch[1];
+                        logToConsole(`SUCCESS: Goods ID found in meta tag content: ${goodsId}`, 'success');
+                    }
+                }
+
+
+                if (goodsId) {
+                    extractedIdValue.textContent = goodsId;
+                    extractedGoodsIdDisplay.style.display = 'block';
+                    logToConsole(`Extraction complete. Goods ID: ${goodsId}`, 'success');
+
+                    // Automatically generate the direct link
+                    const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', goodsId);
+                    const encodedTemuLink = encodeURIComponent(actualTemuLink);
+                    const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
+
+                    displayedLinkElement.textContent = `INITIATE_PROTOCOL_FOR_${goodsId}`;
+                    displayedLinkElement.href = intermediaryLink;
+                    generatedLinkDisplay.style.display = 'block';
+                    logToConsole(`Direct link generated automatically. Ready for activation.`, 'success');
+
+                } else {
+                    logToConsole('ERROR: Goods ID not found in share link content. Check link or Temu\'s structure.', 'error');
+                }
+
+            } catch (error) {
+                logToConsole(`CRITICAL ERROR: Failed to fetch/parse share link data. Reason: ${error.message}. CORS or network issue?`, 'error');
+                // You might want to suggest server-side proxy here
+            }
         });
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
+
+        // --- Deterrence (Optional) ---
+        document.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        document.addEventListener('selectstart', function(e) { e.preventDefault(); });
         document.body.classList.add('no-context-menu');
     </script>
 </body>
