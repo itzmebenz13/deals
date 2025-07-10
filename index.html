@@ -3,139 +3,254 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temu Link Modifier</title>
+    <title>Dynamic Link Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-color: #f75424; /* Temu-like orange */
+            --secondary-color: #ff914d;
+            --text-color: #333;
+            --background-light: #fdfdfd;
+            --background-dark: #e0e0e0;
+            --card-background: #ffffff;
+            --shadow-light: rgba(0, 0, 0, 0.08);
+            --shadow-medium: rgba(0, 0, 0, 0.15);
+            --border-color: #ddd;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #f0f2f5;
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-dark) 100%);
             margin: 0;
-            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            color: var(--text-color);
         }
+
         .container {
-            background-color: #ffffff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: var(--card-background);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-medium);
             text-align: center;
-            width: 90%;
-            max-width: 500px;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+            transform: translateY(0);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
         }
+
+        .container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px var(--shadow-medium);
+        }
+
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.2em;
+            letter-spacing: -0.5px;
         }
+
         .input-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             text-align: left;
         }
+
         .input-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #555;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--text-color);
+            font-size: 1.1em;
         }
+
         .input-group input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
+            width: 100%;
+            padding: 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 1em;
+            color: var(--text-color);
+            background-color: #f9f9f9;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
         }
+
+        .input-group input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(247, 84, 36, 0.2);
+            outline: none;
+        }
+
         button {
-            background-color: #007bff;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 12px 25px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 8px;
+            font-size: 1.15em;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(247, 84, 36, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
+
         button:hover {
-            background-color: #0056b3;
+            background: linear-gradient(45deg, var(--secondary-color), var(--primary-color));
+            box-shadow: 0 8px 20px rgba(247, 84, 36, 0.4);
+            transform: translateY(-2px);
         }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 3px 10px rgba(247, 84, 36, 0.2);
+        }
+
         .result-box {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #e9ecef;
-            border: 1px solid #ced4da;
-            border-radius: 6px;
+            margin-top: 35px;
+            padding: 25px;
+            background-color: #f0f4f7;
+            border: 1px solid #cce7ff;
+            border-radius: 10px;
             text-align: left;
-            word-wrap: break-word; /* Ensures long links wrap */
+            word-wrap: break-word;
+            display: none; /* Hidden by default */
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 0.5s ease-out;
         }
-        #generatedLinkContainer {
-            font-size: 16px;
-            color: #333;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        #generatedLink {
-            color: #007bff;
+
+        .result-box p {
+            font-size: 1.05em;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        #displayedLink {
+            color: #007bff; /* A standard blue for links */
             text-decoration: none;
-            font-weight: bold;
-            display: block; /* Make it a block element to ensure full clickable area */
-            padding: 5px 0;
-            cursor: pointer; /* Indicate it's clickable */
+            font-weight: 500;
+            cursor: pointer;
+            display: block; /* Make it block for better click area */
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #e6f2ff;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+        }
+
+        #displayedLink:hover {
+            background-color: #d0e7ff;
+            transform: translateY(-1px);
+        }
+
+        #displayedLink:active {
+            transform: translateY(0);
+        }
+
+        /* --- Measures to deter (not prevent) inspection --- */
+        /* These are for visual deterrence, not actual security. */
+        /* They can be easily bypassed by advanced users. */
+
+        /* Disable context menu globally */
+        body.no-context-menu {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Temu Link Modifier</h1>
+        <h1>Dynamic Temu Link Generator</h1>
         <div class="input-group">
             <label for="goodsIdInput">Goods ID:</label>
             <input type="text" id="goodsIdInput" placeholder="Enter Goods ID (e.g., 601099516750973)">
         </div>
-        <button id="generateButton">Generate Link</button>
-        <div class="result-box" id="resultBox" style="display: none;">
-            <p><strong>Generated Link:</strong></p>
-            <div id="generatedLinkContainer">
-                <a href="#" id="generatedLink" target="_blank" rel="noopener noreferrer"></a>
-            </div>
+        <button id="generateButton">Generate Dynamic Link</button>
+        <div class="result-box" id="resultBox">
+            <p><strong>Click to access your special offer:</strong></p>
+            <a href="#" id="displayedLink">Your Special Link Here</a>
         </div>
     </div>
 
     <script>
-        const originalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
+        // The original, "hidden" link template
+        const originalTemuLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
+
         const goodsIdInput = document.getElementById('goodsIdInput');
         const generateButton = document.getElementById('generateButton');
-        const generatedLinkElement = document.getElementById('generatedLink');
+        const displayedLinkElement = document.getElementById('displayedLink');
         const resultBox = document.getElementById('resultBox');
+
+        let actualGeneratedLink = ''; // To store the real link temporarily
 
         generateButton.addEventListener('click', function() {
             const newGoodsId = goodsIdInput.value.trim();
 
             if (newGoodsId) {
-                const generatedLink = originalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
-                generatedLinkElement.href = generatedLink;
-                generatedLinkElement.textContent = generatedLink;
-                resultBox.style.display = 'block'; // Show the result box
+                // 1. Construct the actual Temu link
+                actualGeneratedLink = originalTemuLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
 
-                // Attempts to disable right-click and selection - these are *not* foolproof
-                // and are generally discouraged due to poor UX.
-                // Disabling right-click (context menu)
-                generatedLinkElement.oncontextmenu = function() { return false; };
-                // Disabling text selection on the link element
-                generatedLinkElement.style.userSelect = 'none';
-                generatedLinkElement.style.webkitUserSelect = 'none';
-                generatedLinkElement.style.MozUserSelect = 'none';
-                generatedLinkElement.style.msUserSelect = 'none';
+                // 2. Display a "fake" or generic link text to the user
+                displayedLinkElement.textContent = `Get Deal for ID: ${newGoodsId}`; // A more descriptive non-actual link text
+                displayedLinkElement.href = "#"; // Set href to '#' or 'javascript:void(0)' to prevent direct copy of real link
+
+                // Show the result box with animation
+                resultBox.style.display = 'block';
+                resultBox.style.animation = 'none'; // Reset animation for re-triggering
+                void resultBox.offsetWidth; // Trigger reflow
+                resultBox.style.animation = 'fadeIn 0.5s ease-out';
 
             } else {
-                alert('Please enter a Goods ID.');
+                alert('Please enter a Goods ID to generate a link.');
                 resultBox.style.display = 'none'; // Hide if no input
             }
         });
 
-        // Additional global measures for good measure, but again, easily bypassable.
-        // Disable right-click on the entire document (can be annoying for users)
-        document.addEventListener('contextmenu', event => event.preventDefault());
+        // Event listener for when the "displayedLinkElement" is clicked
+        displayedLinkElement.addEventListener('click', function(event) {
+            event.preventDefault(); // Prevent default link behavior (navigating to '#')
 
-        // Prevent selection of text globally (highly disruptive, not recommended for real use)
-        document.addEventListener('selectstart', event => event.preventDefault());
+            if (actualGeneratedLink) {
+                // Perform the redirection to the actual Temu link
+                window.open(actualGeneratedLink, '_blank'); // Opens in a new tab
+                // window.location.href = actualGeneratedLink; // Use this to open in the same tab
+            } else {
+                alert('Please generate a link first.');
+            }
+        });
 
+        // --- GLOBAL DETERRENCE MEASURES (Easily Bypassable) ---
+        // This makes the entire page less prone to right-clicks and selection for casual users.
+        // It's not a security measure.
+
+        // Disable right-click context menu globally
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable text selection globally (can be very annoying for users)
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+
+        // Add class to body to apply user-select: none CSS
+        document.body.classList.add('no-context-menu');
     </script>
 </body>
 </html>
