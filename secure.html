@@ -3,75 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Securing Your Link...</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>/// SECURE_TRANSMISSION_PROTOCOL ///</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary-color: #f75424;
-            --text-color: #333;
-            --background-light: #fdfdfd;
-            --background-dark: #e0e0e0;
+            --hacker-green: #00ff00;
+            --hacker-blue: #00ffff;
+            --hacker-dark: #1a1a1a;
+            --hacker-darker: #0d0d0d;
+            --hacker-grey: #666;
+            --hacker-red: #ff0000;
         }
 
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'VT323', monospace;
+            background-color: var(--hacker-darker);
+            color: var(--hacker-green);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-dark) 100%);
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-            color: var(--text-color);
-            text-align: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Scanline Overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 1px,
+                rgba(0, 255, 0, 0.05) 1px,
+                rgba(0, 255, 0, 0.05) 2px
+            );
+            z-index: -1;
+            animation: scanlines 1s linear infinite;
+        }
+
+        @keyframes scanlines {
+            from { background-position: 0 0; }
+            to { background-position: 0 50px; }
         }
 
         .loading-container {
-            background-color: #ffffff;
+            background-color: var(--hacker-dark);
+            border: 2px solid var(--hacker-green);
+            box-shadow: 0 0 15px var(--hacker-green), inset 0 0 10px var(--hacker-green);
             padding: 50px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            max-width: 500px;
+            border-radius: 8px;
+            max-width: 600px;
             width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            overflow: hidden;
         }
 
         h1 {
-            color: var(--primary-color);
+            font-family: 'Press Start 2P', cursive;
+            color: var(--hacker-blue);
             margin-bottom: 25px;
-            font-weight: 600;
-            font-size: 2em;
+            font-size: 1.5em;
+            text-shadow: 0 0 8px var(--hacker-blue);
+            animation: glitch 1s linear infinite alternate;
+        }
+
+        @keyframes glitch {
+            0% { text-shadow: 0 0 8px var(--hacker-blue); transform: skew(0deg); }
+            20% { text-shadow: 0 0 8px var(--hacker-blue), 2px 2px 0 var(--hacker-red); transform: skew(5deg); }
+            40% { text-shadow: 0 0 8px var(--hacker-blue), -2px -2px 0 var(--hacker-green); transform: skew(-5deg); }
+            60% { text-shadow: 0 0 8px var(--hacker-blue), 3px 0 0 var(--hacker-red); transform: skew(0deg); }
+            80% { text-shadow: 0 0 8px var(--hacker-blue), -3px 3px 0 var(--hacker-green); transform: skew(-3deg); }
+            100% { text-shadow: 0 0 8px var(--hacker-blue); transform: skew(0deg); }
         }
 
         p {
             font-size: 1.1em;
             margin-bottom: 30px;
-            color: #555;
+            color: var(--hacker-green);
+            text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
         }
 
         .spinner {
-            border: 8px solid #f3f3f3;
-            border-top: 8px solid var(--primary-color);
+            border: 8px solid rgba(0, 255, 0, 0.1);
+            border-top: 8px solid var(--hacker-blue);
             border-radius: 50%;
             width: 60px;
             height: 60px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 30px; /* Center spinner and add space below */
+            animation: spin 1s linear infinite, neonPulseBlue 1.5s infinite alternate;
+            margin: 0 auto 30px;
+            box-shadow: 0 0 10px var(--hacker-blue);
         }
 
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        .countdown {
-            font-size: 1.5em;
-            font-weight: 600;
-            color: var(--primary-color);
+        @keyframes neonPulseBlue {
+            from { box-shadow: 0 0 10px var(--hacker-blue); }
+            to { box-shadow: 0 0 20px var(--hacker-blue), 0 0 30px var(--hacker-blue); }
         }
 
-        /* Deterrence measures (optional, easily bypassed) */
+
+        .countdown {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--hacker-green);
+            text-shadow: 0 0 8px var(--hacker-green);
+            animation: textFlicker 0.1s infinite alternate;
+        }
+
+        @keyframes textFlicker {
+            0% { opacity: 1; }
+            50% { opacity: 0.9; }
+            100% { opacity: 1; }
+        }
+
+        .error-message {
+            color: var(--hacker-red);
+            text-shadow: 0 0 5px var(--hacker-red);
+            font-size: 1.2em;
+        }
+
+        .error-message a {
+            color: var(--hacker-blue);
+            text-decoration: underline;
+            text-shadow: 0 0 5px var(--hacker-blue);
+        }
+        .error-message a:hover {
+            color: var(--hacker-green);
+            text-shadow: 0 0 8px var(--hacker-green);
+        }
+
+        /* Deterrence (Optional) */
         body.no-context-menu {
             -webkit-touch-callout: none;
             -webkit-user-select: none;
@@ -80,21 +155,39 @@
             -ms-user-select: none;
             user-select: none;
         }
+
+        /* Scroller visual */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--hacker-darker);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--hacker-green);
+            border-radius: 10px;
+            box-shadow: 0 0 5px var(--hacker-green);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--hacker-blue);
+            box-shadow: 0 0 8px var(--hacker-blue);
+        }
     </style>
 </head>
 <body>
     <div class="loading-container">
-        <h1>Redirecting you securely...</h1>
+        <h1>/// DATA_STREAM_INITIATED ///</h1>
         <div class="spinner"></div>
-        <p>Please wait while we prepare your special Temu deal.</p>
-        <p class="countdown" id="countdown">Redirecting in 3 seconds...</p>
+        <p>Verifying secure connection and redirecting...</p>
+        <p class="countdown" id="countdown">Establishing secure tunnel in 3 seconds...</p>
     </div>
 
     <script>
         const countdownElement = document.getElementById('countdown');
         let countdownTime = 3; // Seconds to wait
 
-        // Function to get a URL parameter by name
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
             var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
@@ -102,31 +195,27 @@
             return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
         };
 
-        const targetUrl = getUrlParameter('url'); // Get the 'url' parameter from the URL
+        const targetUrl = getUrlParameter('url');
 
         if (targetUrl) {
-            countdownElement.textContent = `Redirecting in ${countdownTime} seconds...`;
+            countdownElement.textContent = `Establishing secure tunnel in ${countdownTime} seconds...`;
             const interval = setInterval(() => {
                 countdownTime--;
-                countdownElement.textContent = `Redirecting in ${countdownTime} seconds...`;
+                countdownElement.textContent = `Establishing secure tunnel in ${countdownTime} seconds...`;
                 if (countdownTime <= 0) {
                     clearInterval(interval);
-                    // Perform the actual redirection
                     window.open(targetUrl, '_blank'); // Opens in a new tab/attempts app launch
-                    // If you want it to open in the same tab:
-                    // window.location.replace(targetUrl);
                 }
-            }, 1000); // Update every 1 second
+            }, 1000);
         } else {
-            // Handle case where no URL parameter is found (e.g., accessed directly)
             document.querySelector('.loading-container').innerHTML = `
-                <h1>Error!</h1>
-                <p>No valid link provided for redirection.</p>
-                <p>Please go back to the <a href="index.html">generator page</a>.</p>
+                <h1 class="error-message">/// ACCESS_DENIED ///</h1>
+                <p class="error-message">Error: Target URL not found. Protocol incomplete.</p>
+                <p class="error-message">Return to <a href="index.html">Main_Terminal</a>.</p>
             `;
         }
 
-        // Deterrence measures (optional, easily bypassed)
+        // Deterrence measures (optional)
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
