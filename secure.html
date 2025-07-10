@@ -17,32 +17,39 @@
             --hacker-error: #ff3333; /* Brighter Red for errors */
         }
 
+        /* --- IMPORTANT FIX: Ensure background covers full screen --- */
+        html {
+            height: 100%; /* Ensure html takes full height */
+            background: radial-gradient(circle at center, var(--hacker-medium) 0%, var(--hacker-dark) 100%);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cuc2d2ZW5kZXIuY29tL3N2ZzAwNjczODciPgogICAgPGrectHdyLz4KPC9zdmc+'); /* Subtle static/circuit pattern */
+            background-repeat: repeat;
+            background-size: 16px 16px;
+            overflow: hidden; /* Prevent body scrollbar */
+        }
+
         body {
             font-family: 'Fira Code', monospace;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            background: radial-gradient(circle at center, var(--hacker-medium) 0%, var(--hacker-dark) 100%);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cuc2d2ZW5kZXIuY29tL3N2ZzAwNjczODciPgogICAgPGrectHdyLz4KPC9zdmc+'); /* Subtle static/circuit pattern */
-            background-repeat: repeat;
-            background-size: 16px 16px;
+            min-height: 100vh; /* Keep min-height for content centering */
+            width: 100%; /* Ensure body takes full width */
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
             color: var(--hacker-text);
             text-shadow: 0 0 4px var(--hacker-glow);
-            overflow: hidden;
+            /* background properties removed from body, now on html */
         }
 
         .loading-container {
             background-color: var(--hacker-dark);
             border: 2px solid var(--hacker-green);
             box-shadow: 0 0 25px var(--hacker-glow), inset 0 0 12px var(--hacker-light);
-            padding: 40px; /* Slightly less padding */
+            padding: 40px;
             border-radius: 8px;
-            max-width: 550px; /* Adjusted max-width */
+            max-width: 550px;
             width: 100%;
             text-align: center;
             position: relative;
@@ -85,15 +92,15 @@
         }
 
         p {
-            font-size: 1.05em; /* Adjusted font size */
-            margin-bottom: 25px; /* Less margin */
+            font-size: 1.05em;
+            margin-bottom: 25px;
             color: var(--hacker-text);
             text-shadow: 0 0 3px var(--hacker-glow);
             overflow: hidden;
             white-space: nowrap;
             border-right: 2px solid var(--hacker-green);
             animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
-            display: inline-block; /* Essential for typing effect */
+            display: inline-block;
         }
 
         @keyframes typing {
@@ -107,8 +114,8 @@
         }
 
         .spinner-hacker {
-            font-size: 2.8em; /* Adjusted spinner size */
-            margin: 0 auto 25px; /* Adjusted margin */
+            font-size: 2.8em;
+            margin: 0 auto 25px;
             color: var(--hacker-green);
             text-shadow: 0 0 15px var(--hacker-glow);
             animation: spin-hacker 0.8s linear infinite;
@@ -126,12 +133,12 @@
         }
 
         .countdown {
-            font-size: 1.4em; /* Adjusted countdown size */
+            font-size: 1.4em;
             font-weight: 600;
             color: var(--hacker-green);
             text-shadow: 0 0 10px var(--hacker-glow);
             animation: pulse 1.5s infinite alternate;
-            margin-bottom: 25px; /* Added margin */
+            margin-bottom: 25px;
         }
 
         @keyframes pulse {
@@ -140,7 +147,7 @@
         }
 
         .final-link-container {
-            margin-top: 25px; /* Less margin */
+            margin-top: 25px;
             display: none;
         }
 
@@ -148,10 +155,10 @@
             display: inline-block;
             background-color: var(--hacker-light);
             color: var(--hacker-green);
-            padding: 12px 25px; /* Consistent padding */
+            padding: 12px 25px;
             border: 2px solid var(--hacker-green);
             border-radius: 4px;
-            font-size: 1.05em; /* Consistent font size */
+            font-size: 1.05em;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
