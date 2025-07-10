@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Securing Your Link...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #f75424;
+            --text-color: #333;
+            --background-light: #fdfdfd;
+            --background-dark: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--background-light) 0%, var(--background-dark) 100%);
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+            color: var(--text-color);
+            text-align: center;
+        }
+
+        .loading-container {
+            background-color: #ffffff;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            max-width: 500px;
+            width: 100%;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 25px;
+            font-weight: 600;
+            font-size: 2em;
+        }
+
+        p {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid var(--primary-color);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 30px; /* Center spinner and add space below */
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .countdown {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* Deterrence measures (optional, easily bypassed) */
+        body.no-context-menu {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <h1>Redirecting you securely...</h1>
+        <div class="spinner"></div>
+        <p>Please wait while we prepare your special Temu deal.</p>
+        <p class="countdown" id="countdown">Redirecting in 3 seconds...</p>
+    </div>
+
+    <script>
+        const countdownElement = document.getElementById('countdown');
+        let countdownTime = 3; // Seconds to wait
+
+        // Function to get a URL parameter by name
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        };
+
+        const targetUrl = getUrlParameter('url'); // Get the 'url' parameter from the URL
+
+        if (targetUrl) {
+            countdownElement.textContent = `Redirecting in ${countdownTime} seconds...`;
+            const interval = setInterval(() => {
+                countdownTime--;
+                countdownElement.textContent = `Redirecting in ${countdownTime} seconds...`;
+                if (countdownTime <= 0) {
+                    clearInterval(interval);
+                    // Perform the actual redirection
+                    window.open(targetUrl, '_blank'); // Opens in a new tab/attempts app launch
+                    // If you want it to open in the same tab:
+                    // window.location.replace(targetUrl);
+                }
+            }, 1000); // Update every 1 second
+        } else {
+            // Handle case where no URL parameter is found (e.g., accessed directly)
+            document.querySelector('.loading-container').innerHTML = `
+                <h1>Error!</h1>
+                <p>No valid link provided for redirection.</p>
+                <p>Please go back to the <a href="index.html">generator page</a>.</p>
+            `;
+        }
+
+        // Deterrence measures (optional, easily bypassed)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        document.body.classList.add('no-context-menu');
+    </script>
+</body>
+</html>
