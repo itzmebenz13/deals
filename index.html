@@ -16,6 +16,7 @@
             --shadow-light: rgba(0, 0, 0, 0.08);
             --shadow-medium: rgba(0, 0, 0, 0.15);
             --border-color: #ddd;
+            --error-color: #dc3545;
         }
 
         body {
@@ -29,6 +30,7 @@
             padding: 20px;
             box-sizing: border-box;
             color: var(--text-color);
+            overflow: hidden; /* Prevent scrolling if full-page overlay is used */
         }
 
         .container {
@@ -42,6 +44,7 @@
             box-sizing: border-box;
             transform: translateY(0);
             transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            position: relative; /* For z-index if needed */
         }
 
         .container:hover {
@@ -159,11 +162,70 @@
             transform: translateY(0);
         }
 
-        /* --- Measures to deter (not prevent) inspection --- */
-        /* These are for visual deterrence, not actual security. */
-        /* They can be easily bypassed by advanced users. */
+        /* Incognito Detection Overlay */
+        .incognito-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85); /* Dark semi-transparent overlay */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999; /* Ensure it's on top */
+            animation: overlayFadeIn 0.5s ease-out;
+            text-align: center;
+            backdrop-filter: blur(5px); /* Modern blur effect */
+            -webkit-backdrop-filter: blur(5px);
+        }
 
-        /* Disable context menu globally */
+        @keyframes overlayFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .incognito-message {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            color: var(--text-color);
+            transform: scale(0.9);
+            animation: messagePopUp 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+            position: relative;
+        }
+
+        @keyframes messagePopUp {
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .incognito-message h2 {
+            color: var(--error-color);
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            font-weight: 600;
+        }
+
+        .incognito-message p {
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .incognito-message button {
+            background: var(--error-color);
+            box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+        }
+
+        .incognito-message button:hover {
+            background: #c82333;
+            box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
+        }
+
+        /* --- Measures to deter (not prevent) inspection --- */
         body.no-context-menu {
             -webkit-touch-callout: none; /* iOS Safari */
             -webkit-user-select: none; /* Safari */
@@ -175,7 +237,7 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="mainContent">
         <h1>Dynamic Temu Link Generator</h1>
         <div class="input-group">
             <label for="goodsIdInput">Goods ID:</label>
@@ -188,68 +250,138 @@
         </div>
     </div>
 
-    <script>
-        // The original, "hidden" link template
-        const originalTemuLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
+    <div class="incognito-overlay" id="incognitoOverlay" style="display: none;">
+        <div class="incognito-message">
+            <h2>Private Browse Detected!</h2>
+            <p>For security and tracking purposes, this page is not accessible in Incognito/Private Browse mode. Please open this page in a regular browser window to proceed.</p>
+            <button onclick="window.close();">Close Tab</button>
+        </div>
+    </div>
 
+    <script>
+        // --- Incognito Mode Detection Logic ---
+        // This is a client-side attempt and is NOT foolproof.
+        // Browsers actively work to prevent detection of private mode.
+        async function detectIncognito() {
+            // Chrome & Opera & Edge (Chromium-based)
+            if ('storage' in navigator && 'estimate' in navigator.storage) {
+                try {
+                    const quota = await navigator.storage.estimate();
+                    // In incognito, storage quota might be very low or behave differently
+                    // This is a common heuristic, but can change.
+                    if (quota.quota < 1000000) { // Example threshold, can vary
+                        return true;
+                    }
+                } catch (e) {
+                    // console.error("Storage estimation error:", e);
+                    // Often an error here means it's incognito
+                    return true;
+                }
+            }
+
+            // Firefox
+            if (navigator.userAgent.includes("Firefox")) {
+                try {
+                    // Try to use localStorage, which can throw an error in Firefox private mode if cookies are disabled
+                    localStorage.setItem('test', 'test');
+                    localStorage.removeItem('test');
+                    return false;
+                } catch (e) {
+                    // If a DOMException occurs (often quota exceeded or security error), it might be private mode
+                    return e.name === 'QuotaExceededError' || e.name === 'SecurityError';
+                }
+            }
+
+            // Safari (iOS & macOS)
+            // Safari versions (especially iOS 17+) have strong anti-tracking, making detection harder.
+            // This method checks if localStorage is unavailable or throws errors
+            if (navigator.userAgent.includes("Safari") && !navigator.userAgent.includes("Chrome")) {
+                try {
+                    localStorage.setItem('test', '1');
+                    localStorage.removeItem('test');
+                    return false; // localStorage works, likely not private
+                } catch (e) {
+                    // Safari typically allows localStorage in private mode but clears it on session end.
+                    // However, trying to set an item in certain private configurations might fail.
+                    // This is less reliable than Chrome/Firefox methods.
+                    // A more robust safari check might involve IndexedDB or more complex storage checks.
+                    return true; // Assume private if localStorage fails
+                }
+            }
+
+            // Fallback for other browsers or if no specific detection works
+            return false;
+        }
+
+        // --- Main Page Logic ---
+        const originalTemuLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
         const goodsIdInput = document.getElementById('goodsIdInput');
         const generateButton = document.getElementById('generateButton');
         const displayedLinkElement = document.getElementById('displayedLink');
         const resultBox = document.getElementById('resultBox');
+        const incognitoOverlay = document.getElementById('incognitoOverlay');
+        const mainContent = document.getElementById('mainContent');
 
         let actualGeneratedLink = ''; // To store the real link temporarily
+
+        // Function to hide main content and show overlay
+        function showIncognitoWarning() {
+            mainContent.style.display = 'none'; // Hide the main content
+            incognitoOverlay.style.display = 'flex'; // Show the overlay
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+        }
+
+        // Initialize: Check for incognito mode on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            const isPrivate = await detectIncognito();
+            if (isPrivate) {
+                showIncognitoWarning();
+            } else {
+                // If not incognito, ensure main content is visible (in case CSS hides it initially)
+                mainContent.style.display = 'block'; // Or 'flex' depending on your layout
+            }
+        });
+
 
         generateButton.addEventListener('click', function() {
             const newGoodsId = goodsIdInput.value.trim();
 
             if (newGoodsId) {
-                // 1. Construct the actual Temu link
                 actualGeneratedLink = originalTemuLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
+                displayedLinkElement.textContent = `Get Your Temu Deal for ID: ${newGoodsId}`;
+                displayedLinkElement.href = "#"; // Keep href non-actual
 
-                // 2. Display a "fake" or generic link text to the user
-                displayedLinkElement.textContent = `Get Deal for ID: ${newGoodsId}`; // A more descriptive non-actual link text
-                displayedLinkElement.href = "#"; // Set href to '#' or 'javascript:void(0)' to prevent direct copy of real link
-
-                // Show the result box with animation
                 resultBox.style.display = 'block';
-                resultBox.style.animation = 'none'; // Reset animation for re-triggering
-                void resultBox.offsetWidth; // Trigger reflow
+                resultBox.style.animation = 'none';
+                void resultBox.offsetWidth;
                 resultBox.style.animation = 'fadeIn 0.5s ease-out';
 
             } else {
                 alert('Please enter a Goods ID to generate a link.');
-                resultBox.style.display = 'none'; // Hide if no input
+                resultBox.style.display = 'none';
             }
         });
 
-        // Event listener for when the "displayedLinkElement" is clicked
         displayedLinkElement.addEventListener('click', function(event) {
-            event.preventDefault(); // Prevent default link behavior (navigating to '#')
+            event.preventDefault(); // Prevent default link behavior
 
             if (actualGeneratedLink) {
-                // Perform the redirection to the actual Temu link
-                window.open(actualGeneratedLink, '_blank'); // Opens in a new tab
-                // window.location.href = actualGeneratedLink; // Use this to open in the same tab
+                window.open(actualGeneratedLink, '_blank');
             } else {
                 alert('Please generate a link first.');
             }
         });
 
         // --- GLOBAL DETERRENCE MEASURES (Easily Bypassable) ---
-        // This makes the entire page less prone to right-clicks and selection for casual users.
-        // It's not a security measure.
-
-        // Disable right-click context menu globally
+        // These are for visual deterrence, not actual security.
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
 
-        // Disable text selection globally (can be very annoying for users)
         document.addEventListener('selectstart', function(e) {
             e.preventDefault();
         });
 
-        // Add class to body to apply user-select: none CSS
         document.body.classList.add('no-context-menu');
     </script>
 </body>
