@@ -25,10 +25,11 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 20px;
+            padding: 1rem;
             box-sizing: border-box;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+            text-align: center;
         }
 
         /* Scanline Overlay */
@@ -60,11 +61,10 @@
             background-color: var(--hacker-dark);
             border: 2px solid var(--hacker-green);
             box-shadow: 0 0 15px var(--hacker-green), inset 0 0 10px var(--hacker-green);
-            padding: 50px;
+            padding: 2rem; /* Responsive padding */
             border-radius: 8px;
             max-width: 600px;
             width: 100%;
-            text-align: center;
             position: relative;
             z-index: 1;
             overflow: hidden;
@@ -73,10 +73,11 @@
         h1 {
             font-family: 'Press Start 2P', cursive;
             color: var(--hacker-blue);
-            margin-bottom: 25px;
-            font-size: 1.5em;
+            margin-bottom: 1.5rem;
+            font-size: 1.5em; /* Responsive font size */
             text-shadow: 0 0 8px var(--hacker-blue);
             animation: glitch 1s linear infinite alternate;
+            word-wrap: break-word;
         }
 
         @keyframes glitch {
@@ -90,9 +91,10 @@
 
         p {
             font-size: 1.1em;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
             color: var(--hacker-green);
             text-shadow: 0 0 5px rgba(0, 255, 0, 0.5);
+            word-wrap: break-word;
         }
 
         .spinner {
@@ -102,7 +104,7 @@
             width: 60px;
             height: 60px;
             animation: spin 1s linear infinite, neonPulseBlue 1.5s infinite alternate;
-            margin: 0 auto 30px;
+            margin: 0 auto 2rem;
             box-shadow: 0 0 10px var(--hacker-blue);
         }
 
@@ -115,9 +117,8 @@
             to { box-shadow: 0 0 20px var(--hacker-blue), 0 0 30px var(--hacker-blue); }
         }
 
-
         .countdown {
-            font-size: 1.8em;
+            font-size: 1.6em; /* Responsive font size */
             font-weight: 600;
             color: var(--hacker-green);
             text-shadow: 0 0 8px var(--hacker-green);
@@ -174,6 +175,19 @@
             background: var(--hacker-blue);
             box-shadow: 0 0 8px var(--hacker-blue);
         }
+
+        /* Media Queries for Responsiveness */
+        @media (min-width: 600px) {
+            h1 {
+                font-size: 2em; /* Larger on wider screens */
+            }
+            p {
+                font-size: 1.2em;
+            }
+            .countdown {
+                font-size: 1.8em;
+            }
+        }
     </style>
 </head>
 <body>
@@ -186,7 +200,7 @@
 
     <script>
         const countdownElement = document.getElementById('countdown');
-        let countdownTime = 3; // Seconds to wait
+        let countdownTime = 3;
 
         function getUrlParameter(name) {
             name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
@@ -204,7 +218,7 @@
                 countdownElement.textContent = `Establishing secure tunnel in ${countdownTime} seconds...`;
                 if (countdownTime <= 0) {
                     clearInterval(interval);
-                    window.open(targetUrl, '_blank'); // Opens in a new tab/attempts app launch
+                    window.open(targetUrl, '_blank');
                 }
             }, 1000);
         } else {
@@ -215,7 +229,6 @@
             `;
         }
 
-        // Deterrence measures (optional)
         document.addEventListener('contextmenu', function(e) {
             e.preventDefault();
         });
