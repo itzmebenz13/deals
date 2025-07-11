@@ -146,6 +146,12 @@
         .main-content-section {
             margin-top: 2rem;
         }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
         
         /* Deal of the Day Card */
         .deal-card {
@@ -186,6 +192,37 @@
         }
         .cta-button:hover {
             opacity: 0.8;
+        }
+
+        /* New "More Hot Deals" Section */
+        .hot-deal-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .hot-deal-card:hover {
+            border-color: var(--text-color);
+            transform: translateY(-3px);
+        }
+        .hot-deal-icon {
+            flex-shrink: 0;
+            width: 3rem;
+            height: 3rem;
+            color: var(--text-muted-color);
+        }
+        .hot-deal-title {
+            font-weight: 600;
+        }
+        .hot-deal-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted-color);
         }
         
         /* How it Works Section */
@@ -254,10 +291,10 @@
         </nav>
         <div id="nav-menu" class="nav-menu">
             <div class="flex flex-col gap-2">
-                <a href="#" class="nav-link">Home</a>
-                <a href="#" class="nav-link">About</a>
-                <a href="#" class="nav-link">Categories</a>
-                <a href="#" class="nav-link">Contact</a>
+                <a href="https://itzmebenz13.github.io/deals" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+                <a href="services.html" class="nav-link">Services</a>
             </div>
         </div>
 
@@ -283,7 +320,27 @@
             </section>
 
             <section class="main-content-section mt-16">
-                <h3 class="text-2xl font-bold text-center mb-8">How It Works</h3>
+                <h3 class="section-title">More Hot Deals</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <a href="#" class="hot-deal-card">
+                        <svg class="hot-deal-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+                        <div>
+                            <h4 class="hot-deal-title">50% Off Video Editor Pro</h4>
+                            <p class="hot-deal-desc">Create stunning videos with professional tools.</p>
+                        </div>
+                    </a>
+                    <a href="#" class="hot-deal-card">
+                        <svg class="hot-deal-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        <div>
+                            <h4 class="hot-deal-title">3 Months Free of SkillBuild</h4>
+                            <p class="hot-deal-desc">Learn new skills with thousands of online courses.</p>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section class="main-content-section mt-16">
+                <h3 class="section-title">How It Works</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="how-it-works-step">
                         <div class="step-icon">
@@ -310,7 +367,7 @@
             </section>
             
             <section class="main-content-section mt-16">
-                <h3 class="text-2xl font-bold text-center mb-8">Featured Categories</h3>
+                <h3 class="section-title">Featured Categories</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     <a href="software.html" class="category-card text-center">Software</a>
                     <a href="premiumaccounts.html" class="category-card text-center">Premium Accounts</a>
