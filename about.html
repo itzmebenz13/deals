@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Digital Deals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS variables for theming */
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #0a0a0a;
+            --text-muted-color: #525252;
+            --glow-1-color: #007cf0;
+            --glow-2-color: #1ed760; 
+            --card-bg-color: #ffffff;
+            --card-border-color: rgba(0, 0, 0, 0.1);
+            --nav-bg-color: rgba(245, 245, 245, 0.8);
+            --primary-btn-bg-color: #0a0a0a;
+            --primary-btn-text-color: #f5f5f5;
+        }
+
+        /* Dark mode theme variables */
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #f5f5f5;
+            --text-muted-color: #a3a3a3;
+            --card-bg-color: #1a1a1a;
+            --card-border-color: rgba(255, 255, 255, 0.1);
+            --nav-bg-color: rgba(10, 10, 10, 0.8);
+            --primary-btn-bg-color: #f5f5f5;
+            --primary-btn-text-color: #0a0a0a;
+        }
+
+        /* Base body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Background glow effect */
+        .glow-bg {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .glow-1 { background: var(--glow-1-color); top: 5%; left: 10%; }
+        .glow-2 { background: var(--glow-2-color); bottom: 5%; right: 10%; }
+
+        /* Main content wrapper */
+        .content-wrapper {
+            max-w-2xl;
+            width: 100%;
+            position: relative;
+        }
+        
+        /* Navbar and theme switcher styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .theme-switcher, .menu-toggle {
+            background-color: transparent;
+            border: 1px solid var(--card-border-color);
+            color: var(--text-color);
+            border-radius: 9999px;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, border-color 0.3s;
+            z-index: 1001;
+        }
+        .theme-switcher:hover, .menu-toggle:hover {
+            background-color: var(--card-bg-color);
+        }
+        .icon { width: 1.5rem; height: 1.5rem; }
+
+        /* Overlay Navigation Menu */
+        .nav-menu {
+            position: absolute;
+            top: 4.5rem;
+            left: 0;
+            right: 0;
+            background-color: var(--nav-bg-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+        .nav-menu.is-active {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted-color);
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-link:hover {
+            background-color: var(--card-bg-color);
+            color: var(--text-color);
+        }
+        
+        /* Main header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .main-header p {
+            font-size: 1.125rem; /* 18px */
+            color: var(--text-muted-color);
+        }
+        @media (min-width: 768px) {
+            .main-header p { font-size: 1.25rem; } /* 20px */
+        }
+
+        /* --- About Page Content --- */
+        .about-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: left;
+        }
+        .about-card h2 {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .about-card p, .about-card li {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--text-muted-color);
+            margin-bottom: 1rem;
+        }
+        .about-card ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            margin-bottom: 1rem;
+        }
+        
+        /* Footer */
+        .main-footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted-color);
+        }
+    </style>
+</head>
+<body>
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
+
+    <div class="content-wrapper">
+        <nav class="navbar">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
+                <svg id="menu-icon-open" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg id="menu-icon-close" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <button id="theme-switcher" class="theme-switcher" aria-label="Toggle theme">
+                <svg id="sun-icon" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z"></path></svg>
+                <svg id="moon-icon" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </nav>
+        <div id="nav-menu" class="nav-menu">
+            <div class="flex flex-col gap-2">
+                <a href="https://itzmebenz13.github.io/deals" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+                <a href="services.html" class="nav-link">Services</a>
+            </div>
+        </div>
+
+        <header class="main-header">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-3">
+                About Digital Deals
+            </h1>
+            <p>Discover the mission and features behind your favorite hub for exclusive offers.</p>
+        </header>
+
+        <main>
+            <div class="about-card">
+                <h2>Our Mission</h2>
+                <p>
+                    Welcome to Digital Deals, your premier destination for uncovering the best offers and most innovative tools the digital world has to offer. In an online landscape cluttered with noise and complexity, our mission is to provide a clean, simple, and valuable service for users seeking to maximize their digital lifestyle. We believe that accessing premium entertainment, useful services, and exclusive savings shouldn't be a chore. Our platform is dedicated to curating and creating these opportunities for you in one accessible place.
+                </p>
+
+                <h2>What We Offer</h2>
+                <p>
+                    Our platform is built around a core set of features designed to provide tangible value. From time-sensitive deals to powerful generators, everything here is built with the user in mind.
+                </p>
+                <ul>
+                    <li>
+                        <strong>Exclusive Daily Deals:</strong> Our homepage prominently features a "Deal of the Day," like our popular Spotify Premium offer. These are high-value, limited-time offers, complete with a countdown timer to ensure you never miss out on a great opportunity. We are always on the lookout for the next great deal to bring to our community.
+                    </li>
+                    <li>
+                        <strong>Innovative Digital Tools:</strong> Beyond simple deals, we provide a suite of custom-built generators and services to solve common digital problems. Our tools, like the **GMAIL DotGen** and the **Temu Gift Generator**, are designed to be powerful yet easy to use, helping you manage your online identity and access special promotions effortlessly.
+                    </li>
+                    <li>
+                        <strong>A Hub for Top Services:</strong> Our dedicated "Services" page acts as a curated catalog of valuable digital resources. Whether you need access to premium accounts, software, or other unique online services, we consolidate the best options here, saving you time and effort.
+                    </li>
+                </ul>
+                
+                <h2>Our Commitment to User Experience</h2>
+                <p>
+                    We believe a great service deserves a great interface. From the very beginning, our focus has been on creating a seamless and enjoyable user experience. Our entire website is built on a modern, responsive framework, ensuring it looks and works perfectly on any device, from desktop computers to mobile phones. We've implemented a sleek dark and light mode theme switcher to suit your viewing preference and a clean, collapsible navigation menu for easy Browse. Security and privacy are also paramount; features like our protected link generator are designed to provide access without unnecessarily exposing information.
+                </p>
+
+                <h2>The Journey Ahead</h2>
+                <p>
+                    Digital Deals is a constantly evolving platform. The digital world never stands still, and neither do we. We are committed to continuously updating our offerings, developing new and exciting tools, and expanding our categories to bring you even more value. Our journey is driven by the needs of our users, and we are always exploring new ways to help you save money and enhance your digital life. Thank you for being a part of our community. Explore, generate, and enjoy the deals!
+                </p>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <p>© 2025 Digital Access. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Theme Switcher & Nav Menu Logic (Same as main page) ---
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (currentTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        }
+        themeSwitcher.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            sunIcon.classList.toggle('hidden', isDark);
+            moonIcon.classList.toggle('hidden', !isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            navMenu.classList.toggle('is-active');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('is-active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('is-active');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
