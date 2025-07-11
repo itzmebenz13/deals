@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>/// TEMU PROTOCOL: ACCESS INITIATED ///</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hacker-green: #00ff00; /* Neon Green */
+            --hacker-dark: #0a0a0a; /* Even deeper dark for main background */
+            --hacker-medium: #1c1c1c; /* Slightly lighter dark for container */
+            --hacker-light: #008800; /* Brighter green for accents/buttons */
+            --hacker-text: #00ff00; /* Neon green text */
+            --hacker-glow: rgba(0, 255, 0, 0.6); /* Stronger green glow */
+            --hacker-border: #00cc00; /* Brighter border green */
+            --hacker-error: #ff4444; /* Clearer red for errors */
+        }
+
+        /* Essential for full viewport height and no scrollbars */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent any unwanted scrollbars */
+        }
+
+        body {
+            font-family: 'Fira Code', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100%; /* Ensures body takes full HTML height */
+            width: 100%;
+            box-sizing: border-box;
+            color: var(--hacker-text);
+            text-shadow: 0 0 5px var(--hacker-glow);
+            position: relative; /* For z-index of content */
+            z-index: 2; /* Ensure body content is above background canvas */
+            /* No background on body itself, it's on the canvas */
+        }
+
+        /* --- THE MATRIX BACKGROUND CANVAS (Fixed to cover entire viewport) --- */
+        #matrixCanvas {
+            position: fixed; /* Fixed position to cover entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place behind everything else */
+            display: block; /* Ensure it's a block element */
+            background-color: var(--hacker-dark); /* Base dark background for canvas */
+            /* The radial gradient and static pattern will be drawn on the canvas or layered if needed */
+        }
+
+        .container {
+            background-color: rgba(10, 10, 10, 0.9); /* Slightly transparent, very dark background */
+            border: 2px solid var(--hacker-border);
+            box-shadow: 0 0 30px var(--hacker-glow), inset 0 0 15px var(--hacker-light); /* Stronger glow */
+            padding: 40px; /* Ample padding */
+            border-radius: 10px; /* Slightly more rounded corners */
+            text-align: center;
+            width: 100%;
+            max-width: 580px; /* Optimized max-width */
+            box-sizing: border-box;
+            transform: translateY(0);
+            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
+            position: relative;
+            animation: flicker 1.2s infinite alternate; /* Slightly slower flicker */
+            z-index: 10; /* Ensure it's above the canvas */
+            margin: 20px; /* Ensure some margin on smaller screens */
+        }
+
+        @keyframes flicker {
+            0% { box-shadow: 0 0 30px var(--hacker-glow), inset 0 0 15px var(--hacker-light); }
+            100% { box-shadow: 0 0 32px var(--hacker-glow), inset 0 0 17px var(--hacker-light); }
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(0, 255, 0, 0.03), /* Very subtle grid */
+                rgba(0, 255, 0, 0.03) 1px,
+                transparent 1px,
+                transparent 10px /* Wider grid lines */
+            );
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        h1 {
+            color: var(--hacker-green);
+            margin-bottom: 30px;
+            font-weight: 600;
+            font-size: 2.4em; /* Larger title */
+            letter-spacing: 2.5px; /* More pronounced spacing */
+            text-transform: uppercase;
+            text-shadow: 0 0 15px var(--hacker-glow); /* Stronger text glow */
+            border-bottom: 3px dashed var(--hacker-border); /* Thicker border */
+            padding-bottom: 18px; /* More padding below title */
+        }
+
+        .input-group {
+            margin-bottom: 30px; /* More spacing */
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 12px; /* More spacing */
+            font-weight: 600;
+            color: var(--hacker-text);
+            font-size: 1.1em;
+            text-shadow: 0 0 4px var(--hacker-glow);
+        }
+
+        .input-group input[type="text"] {
+            width: 100%;
+            padding: 15px; /* More padding */
+            border: 1px solid var(--hacker-border);
+            border-radius: 6px; /* Slightly more rounded */
+            font-size: 1.05em; /* Slightly larger font */
+            color: var(--hacker-text);
+            background-color: var(--hacker-medium);
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3); /* Stronger inner shadow */
+            text-shadow: 0 0 4px var(--hacker-glow);
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .input-group input[type="text"]:focus {
+            border-color: var(--hacker-green);
+            box-shadow: 0 0 20px var(--hacker-glow), inset 0 0 12px rgba(0, 255, 0, 0.5); /* More intense focus glow */
+            outline: none;
+        }
+
+        button {
+            background-color: var(--hacker-light);
+            color: var(--hacker-text); /* Button text is neon green */
+            padding: 15px 35px; /* More padding */
+            border: 2px solid var(--hacker-border);
+            border-radius: 6px; /* Slightly more rounded */
+            font-size: 1.2em; /* Larger font */
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px var(--hacker-glow); /* Stronger button glow */
+            text-transform: uppercase;
+            letter-spacing: 1.2px; /* More pronounced spacing */
+            text-shadow: 0 0 8px var(--hacker-glow); /* Stronger text glow */
+        }
+
+        button:hover {
+            background-color: var(--hacker-green); /* Button fills with neon green */
+            color: var(--hacker-dark); /* Text becomes dark */
+            box-shadow: 0 0 25px var(--hacker-green); /* More intense hover glow */
+            transform: translateY(-3px) scale(1.02); /* More pronounced hover effect */
+        }
+
+        button:active {
+            transform: translateY(0);
+            box-shadow: 0 0 8px var(--hacker-green);
+        }
+
+        .result-box {
+            margin-top: 40px; /* More spacing */
+            padding: 30px; /* More padding */
+            background-color: rgba(10, 10, 10, 0.9); /* Transparent dark */
+            border: 2px dashed var(--hacker-border);
+            border-radius: 8px; /* More rounded */
+            text-align: left;
+            word-wrap: break-word;
+            display: none;
+            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3); /* Stronger inner shadow */
+            animation: fadeIn 0.6s ease-out; /* Slightly slower fade-in */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-box::before {
+            content: '>>>';
+            position: absolute;
+            top: 15px; /* Adjust position */
+            left: 15px; /* Adjust position */
+            color: var(--hacker-green);
+            font-weight: bold;
+            font-size: 1.2em; /* Larger prompt */
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); } /* More pronounced fade-in */
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-box p {
+            font-size: 1.1em; /* Slightly larger font */
+            color: var(--hacker-text);
+            margin-bottom: 15px; /* More spacing */
+            padding-left: 40px; /* More space for prompt */
+        }
+
+        #displayedLink {
+            color: var(--hacker-text);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: block;
+            padding: 12px; /* More padding */
+            border-radius: 6px;
+            background-color: var(--hacker-light);
+            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); /* Stronger glow */
+            text-shadow: 0 0 5px var(--hacker-glow);
+            margin-left: 40px; /* Align with p tag */
+            margin-top: 15px; /* More spacing */
+        }
+
+        #displayedLink:hover {
+            background-color: var(--hacker-green);
+            color: var(--hacker-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px var(--hacker-green);
+        }
+
+        #displayedLink:active {
+            transform: translateY(0);
+            box-shadow: 0 0 8px var(--hacker-green);
+        }
+
+        .error-message {
+            color: var(--hacker-error);
+            margin-top: 20px; /* More spacing */
+            font-size: 1em; /* Slightly larger font */
+            display: none;
+            text-shadow: 0 0 8px rgba(255, 0, 0, 0.7); /* Stronger error glow */
+            font-weight: 600;
+        }
+
+        /* Deterrence measures (optional) */
+        body.no-context-menu {
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Matrix background canvas -->
+    <canvas id="matrixCanvas"></canvas>
+
+    <div class="container" id="mainContent">
+        <h1>/// TEMU PROTOCOL: ACCESS INITIATED ///</h1>
+        <div class="input-group">
+            <label for="goodsIdInput">INPUT: TARGET_ID</label>
+            <input type="text" id="goodsIdInput" placeholder="> ENTER TEMU GOODS ID (e.g., 601099516750973)">
+        </div>
+        <button id="generateButton">/// GENERATE SECURE LINK ///</button>
+        <div class="error-message" id="errorMessage">
+            ERROR: INVALID INPUT. PLEASE PROVIDE A VALID GOODS ID.
+        </div>
+        <div class="result-box" id="resultBox">
+            <p><strong>>>> LINK GENERATED. INITIATE TRANSFER:</strong></p>
+            <a href="#" id="displayedLink">CLICK TO SECURE CHANNEL</a>
+        </div>
+    </div>
+
+    <script>
+        // Matrix Rain Effect Script
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas to full screen and handle resize
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Re-initialize drops for new column count
+            const newColumns = Math.floor(canvas.width / fontSize);
+            drops.length = newColumns; // Adjust array size
+            for (let i = 0; i < newColumns; i++) {
+                if (drops[i] === undefined) { // Only initialize new drops
+                    drops[i] = 1;
+                }
+            }
+        }
+
+        // Characters for the rain
+        const katakana = 'アァカサタナハマヤラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const chars = katakana + latin + nums;
+
+        const fontSize = 16;
+        let columns = Math.floor(canvas.width / fontSize);
+        const drops = []; // Array of drop positions
+
+        // Initialize drops
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        // Drawing the characters
+        function drawMatrix() {
+            // Semi-transparent black rectangle to fade out old characters
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)'; /* Use hacker-dark with transparency */
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff00'; // Neon green for characters
+            ctx.font = `${fontSize}px Fira Code`; // Use Fira Code font
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Send the drop back to the top randomly
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        // Initial resize and set up resize listener
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        setInterval(drawMatrix, 30); // Adjust speed here (lower is faster)
+
+
+        // Existing page logic
+        const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
+        const goodsIdInput = document.getElementById('goodsIdInput');
+        const generateButton = document.getElementById('generateButton');
+        const displayedLinkElement = document.getElementById('displayedLink');
+        const resultBox = document.getElementById('resultBox');
+        const errorMessage = document.getElementById('errorMessage');
+
+        generateButton.addEventListener('click', function() {
+            const newGoodsId = goodsIdInput.value.trim();
+
+            if (newGoodsId) {
+                errorMessage.style.display = 'none';
+                const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
+                const encodedTemuLink = encodeURIComponent(actualTemuLink);
+                const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
+
+                displayedLinkElement.textContent = `ACCESS TEMU OFFER FOR ID: ${newGoodsId}`;
+                displayedLinkElement.href = intermediaryLink;
+
+                resultBox.style.display = 'block';
+                resultBox.style.animation = 'none';
+                void resultBox.offsetWidth;
+                resultBox.style.animation = 'fadeIn 0.6s ease-out'; /* Match CSS animation duration */
+
+            } else {
+                errorMessage.style.display = 'block';
+                resultBox.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+        document.addEventListener('selectstart', function(e) {
+            e.preventDefault();
+        });
+        document.body.classList.add('no-context-menu');
+    </script>
+</body>
+</html>
