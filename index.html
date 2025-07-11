@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* CSS variables for theming to make switching easy */
+        /* CSS variables for theming */
         :root {
             --bg-color: #f5f5f5;
             --text-color: #0a0a0a;
@@ -18,6 +18,7 @@
             --link-border-color: rgba(0, 0, 0, 0.1);
             --link-bg-hover-color: rgba(0, 0, 0, 0.1);
             --link-border-hover-color: rgba(0, 0, 0, 0.2);
+            --nav-bg-color: rgba(245, 245, 245, 0.8);
         }
 
         /* Dark mode theme variables */
@@ -29,6 +30,7 @@
             --link-border-color: rgba(255, 255, 255, 0.1);
             --link-bg-hover-color: rgba(255, 255, 255, 0.1);
             --link-border-hover-color: rgba(255, 255, 255, 0.2);
+            --nav-bg-color: rgba(10, 10, 10, 0.8);
         }
 
         /* Base body styling */
@@ -61,6 +63,7 @@
         .content-wrapper {
             max-w-2xl;
             width: 100%;
+            position: relative;
         }
         
         /* Navbar and theme switcher styling */
@@ -68,39 +71,51 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .theme-switcher, .menu-toggle {
             background-color: transparent;
             border: 1px solid var(--link-border-color);
             color: var(--text-color);
-            border-radius: 9999px; /* Fully rounded */
+            border-radius: 9999px;
             cursor: pointer;
             padding: 0.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s, border-color 0.3s;
+            z-index: 1001; /* Ensure buttons are above menu */
         }
         .theme-switcher:hover, .menu-toggle:hover {
             background-color: var(--link-bg-color);
         }
         .icon { width: 1.5rem; height: 1.5rem; }
 
-        /* Collapsible navigation menu styles */
+        /* --- Improved Overlay Navigation Menu --- */
         .nav-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-            margin-bottom: 0;
+            position: absolute;
+            top: 4.5rem; /* Position below the navbar */
+            left: 0;
+            right: 0;
+            background-color: var(--nav-bg-color);
+            backdrop-filter: blur(10px); /* Frosted glass effect */
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--link-border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            z-index: 1000;
+            
+            /* Animation */
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
         }
         .nav-menu.is-active {
-            max-height: 500px; /* Adjust as needed */
-            margin-bottom: 2rem;
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
         }
         .nav-link {
             display: block;
@@ -115,24 +130,18 @@
             background-color: var(--link-bg-color);
             color: var(--text-color);
         }
-
+        
         /* Main header */
         .main-header {
             text-align: center;
             margin-bottom: 3rem;
         }
-        h1 {
-            font-size: 3rem; /* 48px */
-            font-weight: 900;
-            letter-spacing: -0.05em;
-        }
-        p {
+        .main-header p {
             font-size: 1.125rem; /* 18px */
             color: var(--text-muted-color);
         }
         @media (min-width: 768px) {
-            h1 { font-size: 4.5rem; } /* 72px */
-            p { font-size: 1.25rem; } /* 20px */
+            .main-header p { font-size: 1.25rem; } /* 20px */
         }
         
         /* Offer link styles */
@@ -181,14 +190,18 @@
         </nav>
         
         <div id="nav-menu" class="nav-menu">
-            <a href="#" class="nav-link">Home</a>
-            <a href="#" class="nav-link">About</a>
-            <a href="#" class="nav-link">Categories</a>
-            <a href="#" class="nav-link">Contact</a>
+            <div class="flex flex-col gap-2">
+                <a href="#" class="nav-link">Home</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">Categories</a>
+                <a href="#" class="nav-link">Contact</a>
+            </div>
         </div>
 
         <header class="main-header">
-            <h1>Digital Deals</h1>
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-3">
+                Digital Deals
+            </h1>
             <p>Your exclusive access to savings.</p>
         </header>
 
@@ -212,10 +225,8 @@
         const linksContainer = document.getElementById('links-container');
 
         // --- Theme Switcher Logic ---
-        // Check for saved theme in localStorage or user's system preference
         const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         
-        // Apply the initial theme
         if (currentTheme === 'dark') {
             document.documentElement.classList.add('dark');
             sunIcon.classList.add('hidden');
@@ -225,26 +236,33 @@
         themeSwitcher.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
-            
-            // Update icons and save preference
             sunIcon.classList.toggle('hidden', isDark);
             moonIcon.classList.toggle('hidden', !isDark);
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
 
         // --- Collapsible Menu Logic ---
-        menuToggle.addEventListener('click', () => {
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevents the window click listener from firing immediately
             navMenu.classList.toggle('is-active');
             menuIconOpen.classList.toggle('hidden');
             menuIconClose.classList.toggle('hidden');
+        });
+
+        // --- Close menu when clicking outside ---
+        window.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('is-active') && !navMenu.contains(e.target) && e.target !== menuToggle) {
+                navMenu.classList.remove('is-active');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+            }
         });
 
         // --- Dynamic Link Generation ---
         const productLinks = [
             "FREE GIFT LINK GENERATOR",
             "REBATE 100 LOW-PRICED ITEMS",
-            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)",
-            "LIMITED STOCK CLEARANCE"
+            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)"
         ];
 
         function generateRandomFilename(prefix) {
