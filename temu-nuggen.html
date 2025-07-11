@@ -45,6 +45,14 @@
             padding: 2rem;
             transition: background-color 0.3s, color 0.3s;
         }
+        
+        /* Disable text selection and right-click on the body */
+        body {
+           -webkit-user-select: none; /* Safari */
+           -ms-user-select: none; /* IE 10+ */
+           user-select: none; /* Standard syntax */
+           -webkit-touch-callout: none; /* iOS Safari */
+        }
 
         /* Background glow effect */
         .glow-bg {
@@ -157,6 +165,10 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-size: 1rem;
+            /* Allow selection in input fields */
+            -webkit-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
         .generate-button {
             width: 100%;
@@ -207,6 +219,8 @@
             text-align: center;
             text-decoration: none;
             transition: opacity 0.3s;
+            border: none;
+            cursor: pointer;
         }
         .output-button:hover {
             opacity: 0.9;
@@ -270,7 +284,7 @@
                 <div id="loader" class="loader mx-auto"></div>
                 <div id="result" class="hidden flex flex-col items-center gap-4">
                     <p id="success-message" class="text-lg font-medium">The generation was successful. Click the button below to open the Temu app and enjoy a free gift of your choice.</p>
-                    <a id="output-btn" href="#" class="output-button" target="_blank" rel="noopener noreferrer">OPEN TEMU</a>
+                    <button id="output-btn" class="output-button">OPEN TEMU</button>
                 </div>
             </div>
         </main>
@@ -281,6 +295,9 @@
     </div>
 
     <script>
+        // --- Prevent Right-Clicking ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
         // --- Theme Switcher & Nav Menu Logic (Same as main page) ---
         const themeSwitcher = document.getElementById('theme-switcher');
         const sunIcon = document.getElementById('sun-icon');
@@ -345,8 +362,10 @@
                 const baseURL = 'https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=';
                 const finalURL = baseURL + goodsId;
 
-                // Set the link for the button
-                outputBtn.href = finalURL;
+                // Set the link for the button via a click event
+                outputBtn.onclick = () => {
+                    window.open(finalURL, '_blank', 'noopener,noreferrer');
+                };
 
                 // Hide loader and show result
                 loader.classList.add('hidden');
