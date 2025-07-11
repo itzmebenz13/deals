@@ -17,12 +17,12 @@
             --hacker-error: #ff3333; /* Brighter Red for errors */
         }
 
-        /* --- THE CRITICAL FIXES FOR FULL-SCREEN BACKGROUND --- */
+        /* Essential for full viewport height */
         html, body {
-            height: 100%; /* Make sure both html and body take full viewport height */
+            height: 100%;
             margin: 0;
-            padding: 0; /* Remove any default padding */
-            overflow: hidden; /* Prevent scrolling if content is smaller than viewport */
+            padding: 0;
+            overflow: hidden; /* Hide potential scrollbars */
         }
 
         body {
@@ -31,26 +31,32 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            /* Use 100% for min-height, as html is already 100% */
-            /* If 100vh is still an issue, we can use a fixed background layer */
-            min-height: 100%; /* Using 100% instead of 100vh for better mobile compatibility */
+            min-height: 100%; /* Ensure body takes full HTML height */
             width: 100%;
-            
-            /* Apply background directly to body, which now fills the HTML */
+            box-sizing: border-box;
+            color: var(--hacker-text);
+            text-shadow: 0 0 4px var(--hacker-glow);
+            position: relative; /* For z-index of content */
+            z-index: 2; /* Ensure body content is above background */
+        }
+
+        /* --- THE MATRIX BACKGROUND CANVAS --- */
+        #matrixCanvas {
+            position: fixed; /* Fixed position to cover entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Place behind everything */
+            display: block; /* Ensure it's a block element */
             background: radial-gradient(circle at center, var(--hacker-medium) 0%, var(--hacker-dark) 100%);
             background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cuc2d2ZW5kZXIuY29tL3N2ZzAwNjczODciPgogICAgPGrectHdyLz4KPC9zdmc+'); /* Subtle static/circuit pattern */
             background-repeat: repeat;
             background-size: 16px 16px;
-
-            box-sizing: border-box; /* Include padding in the element's total width and height */
-            color: var(--hacker-text);
-            text-shadow: 0 0 4px var(--hacker-glow);
         }
-        /* --- END OF CRITICAL FIXES --- */
-
 
         .loading-container {
-            background-color: var(--hacker-dark);
+            background-color: rgba(18, 18, 18, 0.9); /* Slightly transparent dark */
             border: 2px solid var(--hacker-green);
             box-shadow: 0 0 25px var(--hacker-glow), inset 0 0 12px var(--hacker-light);
             padding: 40px;
@@ -60,7 +66,8 @@
             text-align: center;
             position: relative;
             animation: flicker 1s infinite alternate;
-            margin: 20px; /* Add some margin to prevent content touching edges on very small screens */
+            margin: 20px; /* Add some margin for spacing */
+            z-index: 10; /* Ensure it's above the canvas */
         }
 
         @keyframes flicker {
@@ -189,7 +196,7 @@
         }
 
         .error-container {
-            background-color: var(--hacker-dark);
+            background-color: rgba(18, 18, 18, 0.9); /* Slightly transparent dark */
             border: 2px solid var(--hacker-error);
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.5), inset 0 0 10px rgba(255, 0, 0, 0.3);
             padding: 40px;
@@ -200,7 +207,8 @@
             color: var(--hacker-error);
             text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
             animation: error-flicker 0.5s infinite alternate;
-            margin: 20px; /* Add margin for consistency */
+            margin: 20px;
+            z-index: 10; /* Ensure it's above the canvas */
         }
 
         @keyframes error-flicker {
@@ -232,6 +240,8 @@
     </style>
 </head>
 <body>
+    <canvas id="matrixCanvas"></canvas>
+
     <div class="loading-container" id="mainContainer">
         <h1>/// ESTABLISHING SECURE CHANNEL ///</h1>
         <div class="spinner-hacker" id="spinner">_</div>
@@ -244,6 +254,66 @@
     </div>
 
     <script>
+        // Matrix Rain Effect Script
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas to full screen
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Characters for the rain
+        const katakana = 'アァカサタナハマヤラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨロヲゴゾドボポヴッン';
+        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const nums = '0123456789';
+        const chars = katakana + latin + nums;
+
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = []; // Array of drop positions
+
+        // Initialize drops
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        // Drawing the characters
+        function drawMatrix() {
+            // Semi-transparent black rectangle to fade out old characters
+            ctx.fillStyle = 'rgba(18, 18, 18, 0.05)'; /* Use hacker-dark with transparency */
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#00ff00'; // Neon green for characters
+            ctx.font = `${fontSize}px Fira Code`; // Use Fira Code font
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                // Send the drop back to the top randomly
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            // Re-initialize drops for new column count
+            const newColumns = canvas.width / fontSize;
+            drops.length = 0; // Clear existing drops
+            for (let i = 0; i < newColumns; i++) {
+                drops[i] = 1;
+            }
+        });
+
+        setInterval(drawMatrix, 30); // Adjust speed here (lower is faster)
+
+
+        // Existing page logic
         const countdownElement = document.getElementById('countdown');
         const loadingMessageElement = document.getElementById('loadingMessage');
         const spinnerElement = document.getElementById('spinner');
