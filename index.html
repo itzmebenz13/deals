@@ -4,236 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exclusive Digital Offers</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Custom styles for the Poppins font and overall body */
+        /* Set up a modern, dark theme with the Inter font */
         body {
-            font-family: 'Poppins', sans-serif; /* Changed to Poppins */
-            background-color: #ffffff; /* Pure white background */
+            font-family: 'Inter', sans-serif;
+            background-color: #0a0a0a; /* Off-black for a modern feel */
+            color: #f5f5f5; /* Off-white for readability */
             display: flex;
             justify-content: center;
-            align-items: center; /* Center content vertically */
-            min-height: 100vh; /* Ensure body takes full viewport height */
-            margin: 0;
-            overflow: hidden; /* Hide overflow for background elements */
-            position: relative; /* For positioning pseudo-elements */
+            align-items: flex-start; /* Align content to the top */
+            min-height: 100vh;
+            padding: 2rem; /* Add padding for smaller screens */
         }
 
-        /* Abstract background gradients */
-        .gradient-bg {
+        /* Create a subtle, glowing background effect */
+        .glow-bg {
             position: absolute;
-            width: 50vw; /* Responsive width */
-            height: 50vw; /* Responsive height */
+            width: 40vw;
+            height: 40vw;
             border-radius: 50%;
-            filter: blur(100px); /* Strong blur effect */
-            opacity: 0.3; /* Subtle opacity */
-            z-index: 0; /* Ensure it's in the background */
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: 0;
         }
 
-        .gradient-1 {
-            background: radial-gradient(circle, #ff6b6b, transparent); /* Pinkish-red */
-            top: 10%;
-            left: 5%;
-            transform: translate(-50%, -50%);
+        .glow-1 {
+            background: #007cf0; /* A vibrant blue */
+            top: 5%;
+            left: 10%;
         }
 
-        .gradient-2 {
-            background: radial-gradient(circle, #feca57, transparent); /* Orangish-yellow */
-            bottom: 15%;
-            right: 10%;
-            transform: translate(50%, 50%);
-        }
-
-        .gradient-3 {
-            background: radial-gradient(circle, #1dd1a1, transparent); /* Teal/Green */
-            top: 20%;
-            right: 5%;
-            transform: translate(50%, -50%);
-        }
-
-        .gradient-4 {
-            background: radial-gradient(circle, #48dbfb, transparent); /* Light blue */
+        .glow-2 {
+            background: #ff4d4d; /* A punchy red */
             bottom: 5%;
-            left: 20%;
-            transform: translate(-50%, 50%);
+            right: 10%;
         }
 
-        /* Main content container */
+        /* Main content styling */
         .content-wrapper {
             position: relative;
-            z-index: 10; /* Ensure content is above background */
-            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white overlay for readability */
-            backdrop-filter: blur(5px); /* Subtle blur for the overlay */
-            padding: 2rem; /* Initial padding */
-            border-radius: 1rem; /* Rounded corners for the content area */
+            z-index: 10;
+            max-w-2xl; /* Limit width for readability */
+            width: 100%;
         }
 
-        /* Keyframes for the button click animation */
-        @keyframes button-press {
-            0% {
-                transform: scale(1);
+        /* Animate elements on load for a dynamic entry */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
             }
-            50% {
-                transform: scale(0.98); /* Slightly shrink */
-            }
-            100% {
-                transform: scale(1); /* Return to normal */
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* Link button styling */
-        .link-button {
-            border: 3px solid #000; /* Bolder black border */
-            color: #000; /* Black text */
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.95));
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
-            transition: all 0.3s ease-in-out; /* Smooth transition for all properties */
-            min-height: 56px;
-            display: flex; /* Use flex for proper centering and sizing */
-            justify-content: center; /* Center text horizontally */
-            align-items: center; /* Center text vertically */
-            text-align: center; /* Ensure text is centered even if it wraps */
-            line-height: 1.3; /* Adjust line height for wrapped text */
+        /* Style each animated element with a delay for a staggered effect */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .fade-in-1 { animation-delay: 0.1s; }
+        .fade-in-2 { animation-delay: 0.2s; }
+        .fade-in-3 { animation-delay: 0.3s; }
+        .fade-in-4 { animation-delay: 0.4s; }
+        .fade-in-5 { animation-delay: 0.5s; }
+
+        /* Styling for the interactive links */
+        .offer-link {
+            background-color: rgba(255, 255, 255, 0.05); /* Subtle background */
+            border: 1px solid rgba(255, 255, 255, 0.1); /* Faint border */
+            border-radius: 0.75rem; /* Rounded corners */
+            transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            opacity: 0; /* Start hidden for animation */
         }
 
-        .link-button:hover {
-            background-color: #000; /* Solid black background on hover */
-            color: #fff; /* White text on hover */
-            border-color: #000; /* Solid black border on hover */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* More pronounced shadow on hover */
-            transform: translateY(-3px); /* Slightly more lift on hover */
+        .offer-link:hover {
+            background-color: rgba(255, 255, 255, 0.1); /* Brighter on hover */
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.02); /* Slight zoom effect */
         }
 
-        /* Class for click animation */
-        .link-button.animate-click {
-            animation: button-press 0.2s ease-out; /* Apply click animation */
+        /* Arrow icon styling */
+        .arrow-icon {
+            transition: transform 0.3s;
         }
 
-        /* Dot pattern for top-left */
-        .dot-pattern {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 4px; /* Space between dots */
-        }
-        .dot {
-            width: 6px;
-            height: 6px;
-            background-color: #000; /* Black dots */
-            border-radius: 50%;
-        }
-
-        /* Responsive adjustments for main heading and subtitle */
-        @media (min-width: 768px) {
-            .main-heading {
-                font-size: 5.5rem; /* Larger font size for md screens */
-            }
-            .sub-heading {
-                font-size: 2.5rem; /* Larger font size for md screens */
-            }
-        }
-        @media (min-width: 1024px) {
-            .main-heading {
-                font-size: 7rem; /* Even larger font size for lg screens */
-            }
-            .sub-heading {
-                font-size: 3rem; /* Even larger font size for lg screens */
-            }
+        .offer-link:hover .arrow-icon {
+            transform: translateX(5px); /* Move arrow on hover */
         }
     </style>
 </head>
 <body>
-    <div class="gradient-bg gradient-1"></div>
-    <div class="gradient-bg gradient-2"></div>
-    <div class="gradient-bg gradient-3"></div>
-    <div class="gradient-bg gradient-4"></div>
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
 
-    <div class="absolute top-8 left-8 z-20">
-        <div class="dot-pattern">
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-        </div>
-    </div>
+    <div class="content-wrapper">
+        <header class="text-center mb-12">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-3 fade-in fade-in-1">
+                Digital Deals
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 fade-in fade-in-2">
+                Your exclusive access to savings.
+            </p>
+        </header>
 
-    <div class="absolute top-8 right-8 z-20">
-        <svg class="w-10 h-10 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-        </svg>
-    </div>
+        <main id="links-container" class="flex flex-col gap-4">
+            </main>
 
-    <div class="content-wrapper max-w-3xl w-full text-center p-8 md:p-12 lg:p-16 rounded-2xl shadow-xl">
-        <h1 class="main-heading text-4xl font-extrabold text-gray-900 mb-4 leading-tight tracking-tight">
-            EXCLUSIVE <br> OFFERS
-        </h1>
-        <p class="sub-heading text-xl text-gray-700 mb-16">
-            Unlock your next great deal.
-        </p>
-
-        <div id="links-container" class="flex flex-col items-center gap-6 md:gap-8 max-w-md mx-auto">
-            </div>
-
-        <div class="mt-20 text-center text-gray-500 text-sm">
+        <footer class="mt-16 text-center text-gray-500 text-sm fade-in fade-in-5">
             <p>&copy; 2025 Digital Access. All rights reserved.</p>
-        </div>
+        </footer>
     </div>
 
     <script>
         // Function to generate a random filename
         function generateRandomFilename(prefix) {
-            const randomString = Math.random().toString(36).substring(2, 10); // Generates 8 random alphanumeric characters
+            const randomString = Math.random().toString(36).substring(2, 10);
             return `${prefix}-${randomString}.html`;
         }
 
-        // List of product link titles
+        // Updated list of link titles
         const productLinks = [
             "FREE GIFT LINK GENERATOR",
             "REBATE 100 LOW-PRICED ITEMS",
-            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)",
-            "FLASH SALE ITEMS (UP TO 99% OFF)",
-            "DAILY DEALS & COUPONS",
-            "NEW USER EXCLUSIVE OFFERS",
-            "BUNDLE DEALS & PACKAGE DISCOUNTS",
-            "REFERRAL BONUS PROGRAM",
-            "LIMITED STOCK CLEARANCE",
-            "VIP EARLY ACCESS DEALS"
+            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)"
         ];
 
-        // Get the container for links
         const linksContainer = document.getElementById('links-container');
 
-        // Loop through the product links and create dynamic elements
-        productLinks.forEach(linkText => {
-            // Create a slug from the link text for a more readable filename prefix
+        productLinks.forEach((linkText, index) => {
             const filenamePrefix = linkText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
             const randomFile = generateRandomFilename(filenamePrefix);
 
-            // Create the anchor element
+            // Create the anchor element with modern styling
             const anchor = document.createElement('a');
             anchor.href = randomFile;
-            anchor.target = "_blank"; // Open links in a new tab
-            anchor.rel = "noopener noreferrer"; // Security best practice for target="_blank"
-            anchor.className = "w-full"; // Ensure anchor takes full width for centering
+            anchor.target = "_blank";
+            anchor.rel = "noopener noreferrer";
+            // Stagger the fade-in animation for each link
+            anchor.className = `offer-link fade-in fade-in-${index + 3}`;
 
-            // Create the button-like div
-            const buttonDiv = document.createElement('div');
-            buttonDiv.className = `link-button px-8 py-4 rounded-full text-lg md:text-xl font-bold cursor-pointer`;
-            buttonDiv.textContent = linkText;
+            // Inner content of the link
+            anchor.innerHTML = `
+                <span class="flex-grow text-lg font-semibold">${linkText}</span>
+                <svg class="arrow-icon w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                </svg>
+            `;
 
-            // Add click animation
-            buttonDiv.addEventListener('click', function() {
-                this.classList.add('animate-click');
-            });
-
-            // Remove animation class after it completes to allow re-triggering
-            buttonDiv.addEventListener('animationend', function() {
-                this.classList.remove('animate-click');
-            });
-
-            // Append buttonDiv to anchor
-            anchor.appendChild(buttonDiv);
-
-            // Append the anchor to the links container
             linksContainer.appendChild(anchor);
         });
     </script>
