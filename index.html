@@ -13,7 +13,7 @@
             --text-color: #0a0a0a;
             --text-muted-color: #525252;
             --glow-1-color: #007cf0;
-            --glow-2-color: #ff4d4d;
+            --glow-2-color: #1ed760; /* Changed to Spotify Green */
             --card-bg-color: #ffffff;
             --card-border-color: rgba(0, 0, 0, 0.1);
             --nav-bg-color: rgba(245, 245, 245, 0.8);
@@ -142,7 +142,7 @@
             .main-header p { font-size: 1.25rem; } /* 20px */
         }
 
-        /* --- New Main Page Design --- */
+        /* --- Main Page Design --- */
         .main-content-section {
             margin-top: 2rem;
         }
@@ -160,8 +160,16 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         .deal-image {
-            background-color: #333;
+            background-color: #191414; /* Spotify Black */
             height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .deal-image svg {
+            width: 80px;
+            height: 80px;
+            color: #1ed760; /* Spotify Green */
         }
         .deal-content {
             padding: 1.5rem;
@@ -218,6 +226,9 @@
             font-weight: 600;
             transition: all 0.3s ease;
             cursor: pointer;
+            display: block;
+            text-decoration: none;
+            color: var(--text-color);
         }
         .category-card:hover {
             background-color: var(--primary-btn-bg-color);
@@ -268,12 +279,16 @@
         <main>
             <section class="main-content-section">
                 <div class="deal-card">
-                    <div class="deal-image bg-gray-700">
-                        </div>
+                    <div class="deal-image">
+                        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                            <title>Spotify</title>
+                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.903 17.463c-.22.359-.684.483-.924.262-2.39-1.474-5.38-1.812-8.967-.992-.38.09-.76-.134-.85-.513-.09-.38.13-.762.51-.852 3.872-.887 7.155-.516 9.782 1.11.24.22.365.683.14 1.043zm1.2-3.125c-.273.443-.837.578-1.28.305-2.65-1.63-6.697-2.09-9.924-1.144-.455.132-.938-.16-1.07-.614-.13-.454.16-.937.614-1.07 3.613-.945 7.98-1.42 10.932 1.83.443.272.578.837.306 1.28zm.13-3.41c-3.15-1.92-8.35-2.09-11.55-.945-.536.19-.115.864.422 1.053 3.613.945 8.35 1.11 11.972-1.22.535-.222.19-.886-.342-1.07z"/>
+                        </svg>
+                    </div>
                     <div class="deal-content">
-                        <h2 class="deal-title">Today's Top Offer: 75% Off Pro Software</h2>
-                        <p class="deal-description">Unlock professional-grade software for a fraction of the price. Limited time offer, available only to our members.</p>
-                        <a href="#" class="cta-button">Claim Deal</a>
+                        <h2 class="deal-title">Free 4 Months Spotify Premium</h2>
+                        <p class="deal-description">Enjoy unlimited, ad-free music and listen to your favorite podcasts anywhere. Get 4 months of Spotify Premium, on us.</p>
+                        <a href="https://www.spotify.com/ppt/xiaomi2024-4mft/?code=zpVVsNe59h" class="cta-button" target="_blank" rel="noopener noreferrer">Redeem Offer</a>
                     </div>
                 </div>
             </section>
@@ -308,10 +323,10 @@
             <section class="main-content-section mt-16">
                 <h3 class="text-2xl font-bold text-center mb-8">Featured Categories</h3>
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="category-card text-center">Software</div>
-                    <div class="category-card text-center">E-Books</div>
-                    <div class="category-card text-center">Courses</div>
-                    <div class="category-card text-center">Templates</div>
+                    <a href="software.html" class="category-card text-center">Software</a>
+                    <a href="premiumaccounts.html" class="category-card text-center">Premium Accounts</a>
+                    <a href="services.html" class="category-card text-center">Services</a>
+                    <a href="deals.html" class="category-card text-center">Deals</a>
                 </div>
             </section>
         </main>
@@ -356,7 +371,7 @@
 
         // --- Close menu when clicking outside ---
         window.addEventListener('click', (e) => {
-            if (navMenu.classList.contains('is-active') && !navMenu.contains(e.target) && e.target !== menuToggle) {
+            if (navMenu.classList.contains('is-active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
                 navMenu.classList.remove('is-active');
                 menuIconOpen.classList.remove('hidden');
                 menuIconClose.classList.add('hidden');
