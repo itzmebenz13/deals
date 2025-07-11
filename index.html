@@ -14,11 +14,11 @@
             --text-muted-color: #525252;
             --glow-1-color: #007cf0;
             --glow-2-color: #ff4d4d;
-            --link-bg-color: rgba(0, 0, 0, 0.05);
-            --link-border-color: rgba(0, 0, 0, 0.1);
-            --link-bg-hover-color: rgba(0, 0, 0, 0.1);
-            --link-border-hover-color: rgba(0, 0, 0, 0.2);
+            --card-bg-color: #ffffff;
+            --card-border-color: rgba(0, 0, 0, 0.1);
             --nav-bg-color: rgba(245, 245, 245, 0.8);
+            --primary-btn-bg-color: #0a0a0a;
+            --primary-btn-text-color: #f5f5f5;
         }
 
         /* Dark mode theme variables */
@@ -26,11 +26,11 @@
             --bg-color: #0a0a0a;
             --text-color: #f5f5f5;
             --text-muted-color: #a3a3a3;
-            --link-bg-color: rgba(255, 255, 255, 0.05);
-            --link-border-color: rgba(255, 255, 255, 0.1);
-            --link-bg-hover-color: rgba(255, 255, 255, 0.1);
-            --link-border-hover-color: rgba(255, 255, 255, 0.2);
+            --card-bg-color: #1a1a1a;
+            --card-border-color: rgba(255, 255, 255, 0.1);
             --nav-bg-color: rgba(10, 10, 10, 0.8);
+            --primary-btn-bg-color: #f5f5f5;
+            --primary-btn-text-color: #0a0a0a;
         }
 
         /* Base body styling */
@@ -76,7 +76,7 @@
 
         .theme-switcher, .menu-toggle {
             background-color: transparent;
-            border: 1px solid var(--link-border-color);
+            border: 1px solid var(--card-border-color);
             color: var(--text-color);
             border-radius: 9999px;
             cursor: pointer;
@@ -85,28 +85,26 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s, border-color 0.3s;
-            z-index: 1001; /* Ensure buttons are above menu */
+            z-index: 1001;
         }
         .theme-switcher:hover, .menu-toggle:hover {
-            background-color: var(--link-bg-color);
+            background-color: var(--card-bg-color);
         }
         .icon { width: 1.5rem; height: 1.5rem; }
 
-        /* --- Improved Overlay Navigation Menu --- */
+        /* Overlay Navigation Menu */
         .nav-menu {
             position: absolute;
-            top: 4.5rem; /* Position below the navbar */
+            top: 4.5rem;
             left: 0;
             right: 0;
             background-color: var(--nav-bg-color);
-            backdrop-filter: blur(10px); /* Frosted glass effect */
+            backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid var(--link-border-color);
+            border: 1px solid var(--card-border-color);
             border-radius: 0.75rem;
             padding: 1rem;
             z-index: 1000;
-            
-            /* Animation */
             opacity: 0;
             transform: translateY(-10px);
             visibility: hidden;
@@ -127,7 +125,7 @@
             transition: background-color 0.3s, color 0.3s;
         }
         .nav-link:hover {
-            background-color: var(--link-bg-color);
+            background-color: var(--card-bg-color);
             color: var(--text-color);
         }
         
@@ -143,32 +141,95 @@
         @media (min-width: 768px) {
             .main-header p { font-size: 1.25rem; } /* 20px */
         }
+
+        /* --- New Main Page Design --- */
+        .main-content-section {
+            margin-top: 2rem;
+        }
         
-        /* Offer link styles */
-        .offer-link {
-            background-color: var(--link-bg-color);
-            border: 1px solid var(--link-border-color);
-            border-radius: 0.75rem;
-            transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
-            display: flex;
-            align-items: center;
-            padding: 1rem 1.5rem;
+        /* Deal of the Day Card */
+        .deal-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .deal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .deal-image {
+            background-color: #333;
+            height: 250px;
+        }
+        .deal-content {
+            padding: 1.5rem;
+        }
+        .deal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .deal-description {
+            color: var(--text-muted-color);
+            margin: 0.5rem 0 1.5rem;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-btn-bg-color);
+            color: var(--primary-btn-text-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
             text-decoration: none;
-            color: var(--text-color);
+            transition: opacity 0.3s;
         }
-        .offer-link:hover {
-            background-color: var(--link-bg-hover-color);
-            border-color: var(--link-border-hover-color);
-            transform: scale(1.02);
+        .cta-button:hover {
+            opacity: 0.8;
         }
-        .arrow-icon { transition: transform 0.3s; color: var(--text-muted-color); }
-        .offer-link:hover .arrow-icon { transform: translateX(5px); }
+        
+        /* How it Works Section */
+        .how-it-works-step {
+            text-align: center;
+        }
+        .step-icon {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            width: 4rem;
+            height: 4rem;
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        .step-icon svg {
+            width: 2rem;
+            height: 2rem;
+            color: var(--text-muted-color);
+        }
+        
+        /* Featured Categories Section */
+        .category-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .category-card:hover {
+            background-color: var(--primary-btn-bg-color);
+            color: var(--primary-btn-text-color);
+            border-color: var(--primary-btn-bg-color);
+        }
         
         /* Footer */
         .main-footer {
             margin-top: 4rem;
             text-align: center;
-            font-size: 0.875rem; /* 14px */
+            font-size: 0.875rem;
             color: var(--text-muted-color);
         }
     </style>
@@ -188,7 +249,6 @@
                 <svg id="moon-icon" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
             </button>
         </nav>
-        
         <div id="nav-menu" class="nav-menu">
             <div class="flex flex-col gap-2">
                 <a href="#" class="nav-link">Home</a>
@@ -205,8 +265,56 @@
             <p>Your exclusive access to savings.</p>
         </header>
 
-        <main id="links-container" class="flex flex-col gap-4">
-            </main>
+        <main>
+            <section class="main-content-section">
+                <div class="deal-card">
+                    <div class="deal-image bg-gray-700">
+                        </div>
+                    <div class="deal-content">
+                        <h2 class="deal-title">Today's Top Offer: 75% Off Pro Software</h2>
+                        <p class="deal-description">Unlock professional-grade software for a fraction of the price. Limited time offer, available only to our members.</p>
+                        <a href="#" class="cta-button">Claim Deal</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="main-content-section mt-16">
+                <h3 class="text-2xl font-bold text-center mb-8">How It Works</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="how-it-works-step">
+                        <div class="step-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                        </div>
+                        <h4 class="font-bold">1. Discover</h4>
+                        <p class="text-sm text-muted-color">Browse exclusive deals you won't find anywhere else.</p>
+                    </div>
+                    <div class="how-it-works-step">
+                        <div class="step-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/></svg>
+                        </div>
+                        <h4 class="font-bold">2. Claim</h4>
+                        <p class="text-sm text-muted-color">Instantly claim your offer with a single click.</p>
+                    </div>
+                    <div class="how-it-works-step">
+                        <div class="step-icon">
+                            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"/></svg>
+                        </div>
+                        <h4 class="font-bold">3. Enjoy</h4>
+                        <p class="text-sm text-muted-color">Use your discount and enjoy the incredible savings.</p>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="main-content-section mt-16">
+                <h3 class="text-2xl font-bold text-center mb-8">Featured Categories</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="category-card text-center">Software</div>
+                    <div class="category-card text-center">E-Books</div>
+                    <div class="category-card text-center">Courses</div>
+                    <div class="category-card text-center">Templates</div>
+                </div>
+            </section>
+        </main>
 
         <footer class="main-footer">
             <p>&copy; 2025 Digital Access. All rights reserved.</p>
@@ -222,17 +330,14 @@
         const navMenu = document.getElementById('nav-menu');
         const menuIconOpen = document.getElementById('menu-icon-open');
         const menuIconClose = document.getElementById('menu-icon-close');
-        const linksContainer = document.getElementById('links-container');
 
         // --- Theme Switcher Logic ---
         const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-        
         if (currentTheme === 'dark') {
             document.documentElement.classList.add('dark');
             sunIcon.classList.add('hidden');
             moonIcon.classList.remove('hidden');
         }
-
         themeSwitcher.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
@@ -243,7 +348,7 @@
 
         // --- Collapsible Menu Logic ---
         menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevents the window click listener from firing immediately
+            e.stopPropagation();
             navMenu.classList.toggle('is-active');
             menuIconOpen.classList.toggle('hidden');
             menuIconClose.classList.toggle('hidden');
@@ -256,37 +361,6 @@
                 menuIconOpen.classList.remove('hidden');
                 menuIconClose.classList.add('hidden');
             }
-        });
-
-        // --- Dynamic Link Generation ---
-        const productLinks = [
-            "FREE GIFT LINK GENERATOR",
-            "REBATE 100 LOW-PRICED ITEMS",
-            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)"
-        ];
-
-        function generateRandomFilename(prefix) {
-            const randomString = Math.random().toString(36).substring(2, 10);
-            return `${prefix}-${randomString}.html`;
-        }
-
-        productLinks.forEach(linkText => {
-            const filenamePrefix = linkText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-            const randomFile = generateRandomFilename(filenamePrefix);
-
-            const anchor = document.createElement('a');
-            anchor.href = randomFile;
-            anchor.target = "_blank";
-            anchor.rel = "noopener noreferrer";
-            anchor.className = 'offer-link';
-
-            anchor.innerHTML = `
-                <span class="flex-grow text-lg font-semibold">${linkText}</span>
-                <svg class="arrow-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                </svg>
-            `;
-            linksContainer.appendChild(anchor);
         });
     </script>
 </body>
