@@ -283,7 +283,7 @@
                     </div>
                     <button id="generate-btn" class="generate-button">Generate</button>
                     <p class="note-text">
-                        NOTE: Enter the Goods ID of the item you wish to apply a discount to. This offer is only for eligible users.
+                        NOTE: Enter the Goods ID of the item you wish to apply a discount to. This offer is only for eligible users. Local warehouse sellers are also not supported in this promotion.
                     </p>
                 </div>
             </div>
@@ -294,7 +294,7 @@
                     <p id="success-message" class="text-lg font-medium">The generation was successful. Click the button below to open the Temu app and view your discount.</p>
                     <button id="output-btn" class="output-button">
                         <span class="flex items-center justify-center text-lg">
-                            Open
+                            OPEN
                             <img src="https://freepnglogo.com/images/all_img/temu-logo-png-and-svg-632c.png" alt="Temu Logo" class="h-6 ml-2">
                         </span>
                     </button>
@@ -371,7 +371,7 @@
 
             // Simulate loading for 3 seconds
             setTimeout(() => {
-                const baseURL = 'https://www.temu.com/temu-push-reduction.html?_bg_fs=1&ct=170eec855892b0da4e5c77b02b915fe3&resource_tag=price_discount&ouct=CgI2WRIIVXJzMzdhdFYaMJ-ruvuFq-LBI8VJXdvPgDBxPAxihHFE2XEfVR47ZOL68cG-rHoFk-5-fXpKcGygvjAC&cp_channel=2&site_id=127&cp_play_type=3&ts=1749024656198&sr=cb511aedc4da7e078af4c2de88759cef&show_goods_type=2&image_code=%267690240703%26%26%26%26-1%26&goods_id=';
+                const baseURL = 'https://app.temu.com/temu-push-reduction.html?_bg_fs=1&ct=170eec855892b0da4e5c77b02b915fe3&resource_tag=price_discount&ouct=CgI2WRIIVXJzMzdhdFYaMJ-ruvuFq-LBI8VJXdvPgDBxPAxihHFE2XEfVR47ZOL68cG-rHoFk-5-fXpKcGygvjAC&cp_channel=2&site_id=127&cp_play_type=3&ts=1749024656198&sr=cb511aedc4da7e078af4c2de88759cef&show_goods_type=2&image_code=%267690240703%26%26%26%26-1%26&goods_id=';
                 const finalURL = baseURL + goodsId;
 
                 // Set the link for the button via a click event
