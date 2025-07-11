@@ -198,6 +198,10 @@
         .copy-button:hover {
             background-color: var(--card-bg-color);
         }
+        .results-info {
+            font-size: 0.875rem;
+            color: var(--text-muted-color);
+        }
         
         /* Footer */
         .main-footer {
@@ -250,9 +254,12 @@
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label for="results" class="block text-sm font-medium">Generated Aliases:</label>
-                            <button id="copy-btn" class="copy-button">Copy</button>
+                             <span id="results-info" class="results-info"></span>
                         </div>
-                        <textarea id="results" class="results-area" readonly></textarea>
+                        <textarea id="results" class="results-area" readonly placeholder="Your generated emails will appear here..."></textarea>
+                    </div>
+                    <div class="text-right">
+                         <button id="copy-btn" class="copy-button">Copy to Clipboard</button>
                     </div>
                 </div>
             </div>
@@ -307,46 +314,60 @@
         const emailInput = document.getElementById('email');
         const resultsArea = document.getElementById('results');
         const copyBtn = document.getElementById('copy-btn');
+        const resultsInfo = document.getElementById('results-info');
+
+        const MAX_RESULTS = 50;
 
         generateBtn.addEventListener('click', () => {
-            const email = emailInput.value.trim();
+            const email = emailInput.value.trim().toLowerCase();
             if (!email.endsWith('@gmail.com')) {
                 alert('Please enter a valid @gmail.com address.');
-                return;
-            }
-
-            const username = email.split('@')[0].replace(/\./g, ''); // Get username without dots
-            if (username.length === 0) {
                 resultsArea.value = '';
+                resultsInfo.textContent = '';
                 return;
             }
 
-            const combinations = generateDotCombinations(username);
-            const fullEmails = combinations.map(c => `${c}@gmail.com`);
-            
-            resultsArea.value = fullEmails.join('\n');
-        });
+            const username = email.split('@')[0].replace(/\./g, '');
+            if (username.length < 2) {
+                resultsArea.value = email; // Only one possibility
+                resultsInfo.textContent = '1 alias generated.';
+                return;
+            }
 
-        function generateDotCombinations(str) {
-            const results = [];
-            // Recursive function to find all combinations
-            function findCombos(prefix, suffix) {
-                // Base case: add the current prefix to results
-                results.push(prefix);
-                // Recursive step
-                for (let i = 1; i < suffix.length; i++) {
-                    findCombos(`${prefix}.${suffix.substring(0, i)}`, suffix.substring(i));
+            // The number of gaps between characters is n-1
+            const gaps = username.length - 1;
+            // The number of possible combinations is 2^(n-1)
+            // Use BigInt for safe power calculation with large numbers
+            const totalCombinations = BigInt(2) ** BigInt(gaps);
+
+            const combinations = [];
+            // We iterate up to the total number of combinations or until we hit our display limit
+            const loopLimit = totalCombinations < MAX_RESULTS ? totalCombinations : MAX_RESULTS;
+
+            for (let i = 0; i < loopLimit; i++) {
+                let newUsername = username[0];
+                // Get the binary representation of the current number 'i'
+                const binary = i.toString(2).padStart(gaps, '0');
+                
+                for (let j = 0; j < gaps; j++) {
+                    // If the bit at this position is '1', add a dot
+                    if (binary[j] === '1') {
+                        newUsername += '.';
+                    }
+                    newUsername += username[j + 1];
                 }
+                combinations.push(newUsername);
             }
             
-            // Initial call
-            for (let i = 1; i < str.length; i++) {
-                findCombos(str.substring(0, i), str.substring(i));
+            const fullEmails = combinations.map(c => `${c}@gmail.com`);
+            resultsArea.value = fullEmails.join('\n');
+
+            if (totalCombinations > MAX_RESULTS) {
+                resultsInfo.textContent = `Showing first ${MAX_RESULTS} of ${totalCombinations} aliases.`;
+            } else {
+                resultsInfo.textContent = `${totalCombinations} ${totalCombinations > 1 ? 'aliases' : 'alias'} generated.`;
             }
-            // Add the original string without any dots
-            results.unshift(str);
-            return [...new Set(results)]; // Return unique combinations
-        }
+        });
 
         copyBtn.addEventListener('click', () => {
             if (resultsArea.value) {
@@ -354,7 +375,7 @@
                     .then(() => {
                         copyBtn.textContent = 'Copied!';
                         setTimeout(() => {
-                            copyBtn.textContent = 'Copy';
+                            copyBtn.textContent = 'Copy to Clipboard';
                         }, 2000);
                     })
                     .catch(err => {
