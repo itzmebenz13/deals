@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Digital Deals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS variables for theming */
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #0a0a0a;
+            --text-muted-color: #525252;
+            --glow-1-color: #007cf0;
+            --glow-2-color: #1ed760; 
+            --card-bg-color: #ffffff;
+            --card-border-color: rgba(0, 0, 0, 0.1);
+            --primary-btn-bg-color: #0a0a0a;
+            --primary-btn-text-color: #f5f5f5;
+        }
+
+        /* Dark mode theme variables */
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #f5f5f5;
+            --text-muted-color: #a3a3a3;
+            --card-bg-color: #1a1a1a;
+            --card-border-color: rgba(255, 255, 255, 0.1);
+            --primary-btn-bg-color: #f5f5f5;
+            --primary-btn-text-color: #0a0a0a;
+        }
+
+        /* Base body styling for centering content */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Background glow effect */
+        .glow-bg {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .glow-1 { background: var(--glow-1-color); top: 5%; left: 10%; }
+        .glow-2 { background: var(--glow-2-color); bottom: 5%; right: 10%; }
+
+        /* Login Card */
+        .login-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+        }
+
+        .auth-input {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--card-border-color);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .auth-button {
+            width: 100%;
+            background-color: var(--primary-btn-bg-color);
+            color: var(--primary-btn-text-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: opacity 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+        .auth-button:hover {
+            opacity: 0.9;
+        }
+
+        .link-subtle {
+            font-size: 0.875rem;
+            color: var(--text-muted-color);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .link-subtle:hover {
+            color: var(--text-color);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
+
+    <div class="login-card">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-black tracking-tighter">Welcome Back</h1>
+            <p class="mt-2" style="color: var(--text-muted-color);">Sign in to continue to Digital Deals.</p>
+        </div>
+
+        <form action="#" method="POST">
+            <div class="flex flex-col gap-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium">Email Address</label>
+                    <input type="email" id="email" name="email" class="auth-input" required>
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium">Password</label>
+                    <input type="password" id="password" name="password" class="auth-input" required>
+                </div>
+                <button type="submit" class="auth-button mt-2">Login</button>
+            </div>
+        </form>
+
+        <div class="mt-6 flex justify-between items-center">
+            <a href="#" class="link-subtle font-medium">Create account</a>
+            <a href="#" class="link-subtle">Forgot password?</a>
+        </div>
+    </div>
+
+    <script>
+        // Simple script to detect system theme preference for initial load.
+        // This ensures the theme is set correctly even without the main navigation and switcher.
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark')
+        } else {
+          document.documentElement.classList.remove('dark')
+        }
+    </script>
+</body>
+</html>
