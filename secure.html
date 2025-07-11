@@ -17,14 +17,12 @@
             --hacker-error: #ff3333; /* Brighter Red for errors */
         }
 
-        /* --- IMPORTANT FIX: Ensure background covers full screen --- */
-        html {
-            height: 100%; /* Ensure html takes full height */
-            background: radial-gradient(circle at center, var(--hacker-medium) 0%, var(--hacker-dark) 100%);
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cuc2d2ZW5kZXIuY29tL3N2ZzAwNjczODciPgogICAgPGrectHdyLz4KPC9zdmc+'); /* Subtle static/circuit pattern */
-            background-repeat: repeat;
-            background-size: 16px 16px;
-            overflow: hidden; /* Prevent body scrollbar */
+        /* --- THE CRITICAL FIXES FOR FULL-SCREEN BACKGROUND --- */
+        html, body {
+            height: 100%; /* Make sure both html and body take full viewport height */
+            margin: 0;
+            padding: 0; /* Remove any default padding */
+            overflow: hidden; /* Prevent scrolling if content is smaller than viewport */
         }
 
         body {
@@ -33,15 +31,23 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh; /* Keep min-height for content centering */
-            width: 100%; /* Ensure body takes full width */
-            margin: 0;
-            padding: 20px;
-            box-sizing: border-box;
+            /* Use 100% for min-height, as html is already 100% */
+            /* If 100vh is still an issue, we can use a fixed background layer */
+            min-height: 100%; /* Using 100% instead of 100vh for better mobile compatibility */
+            width: 100%;
+            
+            /* Apply background directly to body, which now fills the HTML */
+            background: radial-gradient(circle at center, var(--hacker-medium) 0%, var(--hacker-dark) 100%);
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgeG1sbnM9Imh0dHA6Ly93d3cuc2d2ZW5kZXIuY29tL3N2ZzAwNjczODciPgogICAgPGrectHdyLz4KPC9zdmc+'); /* Subtle static/circuit pattern */
+            background-repeat: repeat;
+            background-size: 16px 16px;
+
+            box-sizing: border-box; /* Include padding in the element's total width and height */
             color: var(--hacker-text);
             text-shadow: 0 0 4px var(--hacker-glow);
-            /* background properties removed from body, now on html */
         }
+        /* --- END OF CRITICAL FIXES --- */
+
 
         .loading-container {
             background-color: var(--hacker-dark);
@@ -54,6 +60,7 @@
             text-align: center;
             position: relative;
             animation: flicker 1s infinite alternate;
+            margin: 20px; /* Add some margin to prevent content touching edges on very small screens */
         }
 
         @keyframes flicker {
@@ -193,6 +200,7 @@
             color: var(--hacker-error);
             text-shadow: 0 0 8px rgba(255, 0, 0, 0.7);
             animation: error-flicker 0.5s infinite alternate;
+            margin: 20px; /* Add margin for consistency */
         }
 
         @keyframes error-flicker {
