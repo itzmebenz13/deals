@@ -13,7 +13,7 @@
             --text-color: #0a0a0a;
             --text-muted-color: #525252;
             --glow-1-color: #007cf0;
-            --glow-2-color: #1ed760; /* Changed to Spotify Green */
+            --glow-2-color: #1ed760; /* Spotify Green */
             --card-bg-color: #ffffff;
             --card-border-color: rgba(0, 0, 0, 0.1);
             --nav-bg-color: rgba(245, 245, 245, 0.8);
@@ -160,16 +160,8 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
         .deal-image {
-            background-color: #191414; /* Spotify Black */
+            background-color: #191414; /* Fallback color */
             height: 250px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .deal-image svg {
-            width: 80px;
-            height: 80px;
-            color: #1ed760; /* Spotify Green */
         }
         .deal-content {
             padding: 1.5rem;
@@ -280,10 +272,7 @@
             <section class="main-content-section">
                 <div class="deal-card">
                     <div class="deal-image">
-                        <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
-                            <title>Spotify</title>
-                            <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.903 17.463c-.22.359-.684.483-.924.262-2.39-1.474-5.38-1.812-8.967-.992-.38.09-.76-.134-.85-.513-.09-.38.13-.762.51-.852 3.872-.887 7.155-.516 9.782 1.11.24.22.365.683.14 1.043zm1.2-3.125c-.273.443-.837.578-1.28.305-2.65-1.63-6.697-2.09-9.924-1.144-.455.132-.938-.16-1.07-.614-.13-.454.16-.937.614-1.07 3.613-.945 7.98-1.42 10.932 1.83.443.272.578.837.306 1.28zm.13-3.41c-3.15-1.92-8.35-2.09-11.55-.945-.536.19-.115.864.422 1.053 3.613.945 8.35 1.11 11.972-1.22.535-.222.19-.886-.342-1.07z"/>
-                        </svg>
+                        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/12/Generic-FTR-headers_V10-1440x550.jpg" alt="Spotify Premium Offer" class="w-full h-full object-cover">
                     </div>
                     <div class="deal-content">
                         <h2 class="deal-title">Free 4 Months Spotify Premium</h2>
@@ -332,7 +321,7 @@
         </main>
 
         <footer class="main-footer">
-            <p>&copy; 2025 Digital Access. All rights reserved.</p>
+            <p>© 2025 Digital Access. All rights reserved.</p>
         </footer>
     </div>
 
