@@ -7,96 +7,160 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Set up a modern, dark theme with the Inter font */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a; /* Off-black for a modern feel */
-            color: #f5f5f5; /* Off-white for readability */
-            display: flex;
-            justify-content: center;
-            align-items: flex-start; /* Align content to the top */
-            min-height: 100vh;
-            padding: 2rem; /* Add padding for smaller screens */
+        /* CSS variables for theming to make switching easy */
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #0a0a0a;
+            --text-muted-color: #525252;
+            --glow-1-color: #007cf0;
+            --glow-2-color: #ff4d4d;
+            --link-bg-color: rgba(0, 0, 0, 0.05);
+            --link-border-color: rgba(0, 0, 0, 0.1);
+            --link-bg-hover-color: rgba(0, 0, 0, 0.1);
+            --link-border-hover-color: rgba(0, 0, 0, 0.2);
         }
 
-        /* Create a subtle, glowing background effect */
+        /* Dark mode theme variables */
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #f5f5f5;
+            --text-muted-color: #a3a3a3;
+            --link-bg-color: rgba(255, 255, 255, 0.05);
+            --link-border-color: rgba(255, 255, 255, 0.1);
+            --link-bg-hover-color: rgba(255, 255, 255, 0.1);
+            --link-border-hover-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Base body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Background glow effect */
         .glow-bg {
-            position: absolute;
+            position: fixed;
             width: 40vw;
             height: 40vw;
             border-radius: 50%;
             filter: blur(150px);
             opacity: 0.15;
-            z-index: 0;
+            z-index: -1;
         }
+        .glow-1 { background: var(--glow-1-color); top: 5%; left: 10%; }
+        .glow-2 { background: var(--glow-2-color); bottom: 5%; right: 10%; }
 
-        .glow-1 {
-            background: #007cf0; /* A vibrant blue */
-            top: 5%;
-            left: 10%;
-        }
-
-        .glow-2 {
-            background: #ff4d4d; /* A punchy red */
-            bottom: 5%;
-            right: 10%;
-        }
-
-        /* Main content styling */
+        /* Main content wrapper */
         .content-wrapper {
-            position: relative;
-            z-index: 10;
-            max-w-2xl; /* Limit width for readability */
+            max-w-2xl;
             width: 100%;
         }
-
-        /* Animate elements on load for a dynamic entry */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        
+        /* Navbar and theme switcher styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
         }
 
-        /* Style each animated element with a delay for a staggered effect */
-        .fade-in {
-            animation: fadeIn 0.6s ease-out forwards;
+        .theme-switcher, .menu-toggle {
+            background-color: transparent;
+            border: 1px solid var(--link-border-color);
+            color: var(--text-color);
+            border-radius: 9999px; /* Fully rounded */
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, border-color 0.3s;
         }
-        .fade-in-1 { animation-delay: 0.1s; }
-        .fade-in-2 { animation-delay: 0.2s; }
-        .fade-in-3 { animation-delay: 0.3s; }
-        .fade-in-4 { animation-delay: 0.4s; }
-        .fade-in-5 { animation-delay: 0.5s; }
+        .theme-switcher:hover, .menu-toggle:hover {
+            background-color: var(--link-bg-color);
+        }
+        .icon { width: 1.5rem; height: 1.5rem; }
 
-        /* Styling for the interactive links */
+        /* Collapsible navigation menu styles */
+        .nav-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 0;
+        }
+        .nav-menu.is-active {
+            max-height: 500px; /* Adjust as needed */
+            margin-bottom: 2rem;
+        }
+        .nav-link {
+            display: block;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-decoration: none;
+            color: var(--text-muted-color);
+            font-weight: 500;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-link:hover {
+            background-color: var(--link-bg-color);
+            color: var(--text-color);
+        }
+
+        /* Main header */
+        .main-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        h1 {
+            font-size: 3rem; /* 48px */
+            font-weight: 900;
+            letter-spacing: -0.05em;
+        }
+        p {
+            font-size: 1.125rem; /* 18px */
+            color: var(--text-muted-color);
+        }
+        @media (min-width: 768px) {
+            h1 { font-size: 4.5rem; } /* 72px */
+            p { font-size: 1.25rem; } /* 20px */
+        }
+        
+        /* Offer link styles */
         .offer-link {
-            background-color: rgba(255, 255, 255, 0.05); /* Subtle background */
-            border: 1px solid rgba(255, 255, 255, 0.1); /* Faint border */
-            border-radius: 0.75rem; /* Rounded corners */
+            background-color: var(--link-bg-color);
+            border: 1px solid var(--link-border-color);
+            border-radius: 0.75rem;
             transition: background-color 0.3s, border-color 0.3s, transform 0.3s;
             display: flex;
             align-items: center;
             padding: 1rem 1.5rem;
-            opacity: 0; /* Start hidden for animation */
+            text-decoration: none;
+            color: var(--text-color);
         }
-
         .offer-link:hover {
-            background-color: rgba(255, 255, 255, 0.1); /* Brighter on hover */
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.02); /* Slight zoom effect */
+            background-color: var(--link-bg-hover-color);
+            border-color: var(--link-border-hover-color);
+            transform: scale(1.02);
         }
-
-        /* Arrow icon styling */
-        .arrow-icon {
-            transition: transform 0.3s;
-        }
-
-        .offer-link:hover .arrow-icon {
-            transform: translateX(5px); /* Move arrow on hover */
+        .arrow-icon { transition: transform 0.3s; color: var(--text-muted-color); }
+        .offer-link:hover .arrow-icon { transform: translateX(5px); }
+        
+        /* Footer */
+        .main-footer {
+            margin-top: 4rem;
+            text-align: center;
+            font-size: 0.875rem; /* 14px */
+            color: var(--text-muted-color);
         }
     </style>
 </head>
@@ -105,59 +169,105 @@
     <div class="glow-bg glow-2"></div>
 
     <div class="content-wrapper">
-        <header class="text-center mb-12">
-            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-3 fade-in fade-in-1">
-                Digital Deals
-            </h1>
-            <p class="text-lg md:text-xl text-gray-400 fade-in fade-in-2">
-                Your exclusive access to savings.
-            </p>
+        <nav class="navbar">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
+                <svg id="menu-icon-open" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg id="menu-icon-close" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <button id="theme-switcher" class="theme-switcher" aria-label="Toggle theme">
+                <svg id="sun-icon" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z"></path></svg>
+                <svg id="moon-icon" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </nav>
+        
+        <div id="nav-menu" class="nav-menu">
+            <a href="#" class="nav-link">Home</a>
+            <a href="#" class="nav-link">About</a>
+            <a href="#" class="nav-link">Categories</a>
+            <a href="#" class="nav-link">Contact</a>
+        </div>
+
+        <header class="main-header">
+            <h1>Digital Deals</h1>
+            <p>Your exclusive access to savings.</p>
         </header>
 
         <main id="links-container" class="flex flex-col gap-4">
             </main>
 
-        <footer class="mt-16 text-center text-gray-500 text-sm fade-in fade-in-5">
+        <footer class="main-footer">
             <p>&copy; 2025 Digital Access. All rights reserved.</p>
         </footer>
     </div>
 
     <script>
-        // Function to generate a random filename
+        // --- DOM Element Selection ---
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        const linksContainer = document.getElementById('links-container');
+
+        // --- Theme Switcher Logic ---
+        // Check for saved theme in localStorage or user's system preference
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        
+        // Apply the initial theme
+        if (currentTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+            sunIcon.classList.add('hidden');
+            moonIcon.classList.remove('hidden');
+        }
+
+        themeSwitcher.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            
+            // Update icons and save preference
+            sunIcon.classList.toggle('hidden', isDark);
+            moonIcon.classList.toggle('hidden', !isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+
+        // --- Collapsible Menu Logic ---
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('is-active');
+            menuIconOpen.classList.toggle('hidden');
+            menuIconClose.classList.toggle('hidden');
+        });
+
+        // --- Dynamic Link Generation ---
+        const productLinks = [
+            "FREE GIFT LINK GENERATOR",
+            "REBATE 100 LOW-PRICED ITEMS",
+            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)",
+            "LIMITED STOCK CLEARANCE"
+        ];
+
         function generateRandomFilename(prefix) {
             const randomString = Math.random().toString(36).substring(2, 10);
             return `${prefix}-${randomString}.html`;
         }
 
-        // Updated list of link titles
-        const productLinks = [
-            "FREE GIFT LINK GENERATOR",
-            "REBATE 100 LOW-PRICED ITEMS",
-            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)"
-        ];
-
-        const linksContainer = document.getElementById('links-container');
-
-        productLinks.forEach((linkText, index) => {
+        productLinks.forEach(linkText => {
             const filenamePrefix = linkText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
             const randomFile = generateRandomFilename(filenamePrefix);
 
-            // Create the anchor element with modern styling
             const anchor = document.createElement('a');
             anchor.href = randomFile;
             anchor.target = "_blank";
             anchor.rel = "noopener noreferrer";
-            // Stagger the fade-in animation for each link
-            anchor.className = `offer-link fade-in fade-in-${index + 3}`;
+            anchor.className = 'offer-link';
 
-            // Inner content of the link
             anchor.innerHTML = `
                 <span class="flex-grow text-lg font-semibold">${linkText}</span>
-                <svg class="arrow-icon w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg class="arrow-icon w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
                 </svg>
             `;
-
             linksContainer.appendChild(anchor);
         });
     </script>
