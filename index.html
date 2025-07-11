@@ -3,376 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>/// TEMU PROTOCOL: ACCESS INITIATED ///</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <title>Exclusive Digital Offers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root {
-            --hacker-green: #00ff00; /* Neon Green */
-            --hacker-dark: #0a0a0a; /* Even deeper dark for main background */
-            --hacker-medium: #1c1c1c; /* Slightly lighter dark for container */
-            --hacker-light: #008800; /* Brighter green for accents/buttons */
-            --hacker-text: #00ff00; /* Neon green text */
-            --hacker-glow: rgba(0, 255, 0, 0.6); /* Stronger green glow */
-            --hacker-border: #00cc00; /* Brighter border green */
-            --hacker-error: #ff4444; /* Clearer red for errors */
-        }
-
-        /* Essential for full viewport height and no scrollbars */
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Prevent any unwanted scrollbars */
-        }
-
+        /* Custom styles for the Poppins font and overall body */
         body {
-            font-family: 'Fira Code', monospace;
+            font-family: 'Poppins', sans-serif; /* Changed to Poppins */
+            background-color: #ffffff; /* Pure white background */
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100%; /* Ensures body takes full HTML height */
-            width: 100%;
-            box-sizing: border-box;
-            color: var(--hacker-text);
-            text-shadow: 0 0 5px var(--hacker-glow);
-            position: relative; /* For z-index of content */
-            z-index: 2; /* Ensure body content is above background canvas */
-            /* No background on body itself, it's on the canvas */
+            align-items: center; /* Center content vertically */
+            min-height: 100vh; /* Ensure body takes full viewport height */
+            margin: 0;
+            overflow: hidden; /* Hide overflow for background elements */
+            position: relative; /* For positioning pseudo-elements */
         }
 
-        /* --- THE MATRIX BACKGROUND CANVAS (Fixed to cover entire viewport) --- */
-        #matrixCanvas {
-            position: fixed; /* Fixed position to cover entire viewport */
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1; /* Place behind everything else */
-            display: block; /* Ensure it's a block element */
-            background-color: var(--hacker-dark); /* Base dark background for canvas */
-            /* The radial gradient and static pattern will be drawn on the canvas or layered if needed */
-        }
-
-        .container {
-            background-color: rgba(10, 10, 10, 0.9); /* Slightly transparent, very dark background */
-            border: 2px solid var(--hacker-border);
-            box-shadow: 0 0 30px var(--hacker-glow), inset 0 0 15px var(--hacker-light); /* Stronger glow */
-            padding: 40px; /* Ample padding */
-            border-radius: 10px; /* Slightly more rounded corners */
-            text-align: center;
-            width: 100%;
-            max-width: 580px; /* Optimized max-width */
-            box-sizing: border-box;
-            transform: translateY(0);
-            transition: transform 0.3s ease-out, box-shadow 0.3s ease-out;
-            position: relative;
-            animation: flicker 1.2s infinite alternate; /* Slightly slower flicker */
-            z-index: 10; /* Ensure it's above the canvas */
-            margin: 20px; /* Ensure some margin on smaller screens */
-        }
-
-        @keyframes flicker {
-            0% { box-shadow: 0 0 30px var(--hacker-glow), inset 0 0 15px var(--hacker-light); }
-            100% { box-shadow: 0 0 32px var(--hacker-glow), inset 0 0 17px var(--hacker-light); }
-        }
-
-        .container::before {
-            content: '';
+        /* Abstract background gradients */
+        .gradient-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                45deg,
-                rgba(0, 255, 0, 0.03), /* Very subtle grid */
-                rgba(0, 255, 0, 0.03) 1px,
-                transparent 1px,
-                transparent 10px /* Wider grid lines */
-            );
-            pointer-events: none;
-            z-index: 1;
+            width: 50vw; /* Responsive width */
+            height: 50vw; /* Responsive height */
+            border-radius: 50%;
+            filter: blur(100px); /* Strong blur effect */
+            opacity: 0.3; /* Subtle opacity */
+            z-index: 0; /* Ensure it's in the background */
         }
 
-        h1 {
-            color: var(--hacker-green);
-            margin-bottom: 30px;
-            font-weight: 600;
-            font-size: 2.4em; /* Larger title */
-            letter-spacing: 2.5px; /* More pronounced spacing */
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--hacker-glow); /* Stronger text glow */
-            border-bottom: 3px dashed var(--hacker-border); /* Thicker border */
-            padding-bottom: 18px; /* More padding below title */
+        .gradient-1 {
+            background: radial-gradient(circle, #ff6b6b, transparent); /* Pinkish-red */
+            top: 10%;
+            left: 5%;
+            transform: translate(-50%, -50%);
         }
 
-        .input-group {
-            margin-bottom: 30px; /* More spacing */
-            text-align: left;
+        .gradient-2 {
+            background: radial-gradient(circle, #feca57, transparent); /* Orangish-yellow */
+            bottom: 15%;
+            right: 10%;
+            transform: translate(50%, 50%);
         }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 12px; /* More spacing */
-            font-weight: 600;
-            color: var(--hacker-text);
-            font-size: 1.1em;
-            text-shadow: 0 0 4px var(--hacker-glow);
+        .gradient-3 {
+            background: radial-gradient(circle, #1dd1a1, transparent); /* Teal/Green */
+            top: 20%;
+            right: 5%;
+            transform: translate(50%, -50%);
         }
 
-        .input-group input[type="text"] {
-            width: 100%;
-            padding: 15px; /* More padding */
-            border: 1px solid var(--hacker-border);
-            border-radius: 6px; /* Slightly more rounded */
-            font-size: 1.05em; /* Slightly larger font */
-            color: var(--hacker-text);
-            background-color: var(--hacker-medium);
-            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3); /* Stronger inner shadow */
-            text-shadow: 0 0 4px var(--hacker-glow);
-            box-sizing: border-box;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        .gradient-4 {
+            background: radial-gradient(circle, #48dbfb, transparent); /* Light blue */
+            bottom: 5%;
+            left: 20%;
+            transform: translate(-50%, 50%);
         }
 
-        .input-group input[type="text"]:focus {
-            border-color: var(--hacker-green);
-            box-shadow: 0 0 20px var(--hacker-glow), inset 0 0 12px rgba(0, 255, 0, 0.5); /* More intense focus glow */
-            outline: none;
-        }
-
-        button {
-            background-color: var(--hacker-light);
-            color: var(--hacker-text); /* Button text is neon green */
-            padding: 15px 35px; /* More padding */
-            border: 2px solid var(--hacker-border);
-            border-radius: 6px; /* Slightly more rounded */
-            font-size: 1.2em; /* Larger font */
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 15px var(--hacker-glow); /* Stronger button glow */
-            text-transform: uppercase;
-            letter-spacing: 1.2px; /* More pronounced spacing */
-            text-shadow: 0 0 8px var(--hacker-glow); /* Stronger text glow */
-        }
-
-        button:hover {
-            background-color: var(--hacker-green); /* Button fills with neon green */
-            color: var(--hacker-dark); /* Text becomes dark */
-            box-shadow: 0 0 25px var(--hacker-green); /* More intense hover glow */
-            transform: translateY(-3px) scale(1.02); /* More pronounced hover effect */
-        }
-
-        button:active {
-            transform: translateY(0);
-            box-shadow: 0 0 8px var(--hacker-green);
-        }
-
-        .result-box {
-            margin-top: 40px; /* More spacing */
-            padding: 30px; /* More padding */
-            background-color: rgba(10, 10, 10, 0.9); /* Transparent dark */
-            border: 2px dashed var(--hacker-border);
-            border-radius: 8px; /* More rounded */
-            text-align: left;
-            word-wrap: break-word;
-            display: none;
-            box-shadow: inset 0 0 10px rgba(0, 255, 0, 0.3); /* Stronger inner shadow */
-            animation: fadeIn 0.6s ease-out; /* Slightly slower fade-in */
+        /* Main content container */
+        .content-wrapper {
             position: relative;
-            overflow: hidden;
+            z-index: 10; /* Ensure content is above background */
+            background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent white overlay for readability */
+            backdrop-filter: blur(5px); /* Subtle blur for the overlay */
+            padding: 2rem; /* Initial padding */
+            border-radius: 1rem; /* Rounded corners for the content area */
         }
 
-        .result-box::before {
-            content: '>>>';
-            position: absolute;
-            top: 15px; /* Adjust position */
-            left: 15px; /* Adjust position */
-            color: var(--hacker-green);
-            font-weight: bold;
-            font-size: 1.2em; /* Larger prompt */
+        /* Keyframes for the button click animation */
+        @keyframes button-press {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.98); /* Slightly shrink */
+            }
+            100% {
+                transform: scale(1); /* Return to normal */
+            }
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); } /* More pronounced fade-in */
-            to { opacity: 1; transform: translateY(0); }
+        /* Link button styling */
+        .link-button {
+            border: 3px solid #000; /* Bolder black border */
+            color: #000; /* Black text */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(245, 245, 245, 0.95));
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+            transition: all 0.3s ease-in-out; /* Smooth transition for all properties */
+            min-height: 56px;
+            display: flex; /* Use flex for proper centering and sizing */
+            justify-content: center; /* Center text horizontally */
+            align-items: center; /* Center text vertically */
+            text-align: center; /* Ensure text is centered even if it wraps */
+            line-height: 1.3; /* Adjust line height for wrapped text */
         }
 
-        .result-box p {
-            font-size: 1.1em; /* Slightly larger font */
-            color: var(--hacker-text);
-            margin-bottom: 15px; /* More spacing */
-            padding-left: 40px; /* More space for prompt */
+        .link-button:hover {
+            background-color: #000; /* Solid black background on hover */
+            color: #fff; /* White text on hover */
+            border-color: #000; /* Solid black border on hover */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25); /* More pronounced shadow on hover */
+            transform: translateY(-3px); /* Slightly more lift on hover */
         }
 
-        #displayedLink {
-            color: var(--hacker-text);
-            text-decoration: none;
-            font-weight: 600;
-            cursor: pointer;
-            display: block;
-            padding: 12px; /* More padding */
-            border-radius: 6px;
-            background-color: var(--hacker-light);
-            transition: background-color 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.3); /* Stronger glow */
-            text-shadow: 0 0 5px var(--hacker-glow);
-            margin-left: 40px; /* Align with p tag */
-            margin-top: 15px; /* More spacing */
+        /* Class for click animation */
+        .link-button.animate-click {
+            animation: button-press 0.2s ease-out; /* Apply click animation */
         }
 
-        #displayedLink:hover {
-            background-color: var(--hacker-green);
-            color: var(--hacker-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 0 20px var(--hacker-green);
+        /* Dot pattern for top-left */
+        .dot-pattern {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px; /* Space between dots */
+        }
+        .dot {
+            width: 6px;
+            height: 6px;
+            background-color: #000; /* Black dots */
+            border-radius: 50%;
         }
 
-        #displayedLink:active {
-            transform: translateY(0);
-            box-shadow: 0 0 8px var(--hacker-green);
+        /* Responsive adjustments for main heading and subtitle */
+        @media (min-width: 768px) {
+            .main-heading {
+                font-size: 5.5rem; /* Larger font size for md screens */
+            }
+            .sub-heading {
+                font-size: 2.5rem; /* Larger font size for md screens */
+            }
         }
-
-        .error-message {
-            color: var(--hacker-error);
-            margin-top: 20px; /* More spacing */
-            font-size: 1em; /* Slightly larger font */
-            display: none;
-            text-shadow: 0 0 8px rgba(255, 0, 0, 0.7); /* Stronger error glow */
-            font-weight: 600;
-        }
-
-        /* Deterrence measures (optional) */
-        body.no-context-menu {
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            -khtml-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
+        @media (min-width: 1024px) {
+            .main-heading {
+                font-size: 7rem; /* Even larger font size for lg screens */
+            }
+            .sub-heading {
+                font-size: 3rem; /* Even larger font size for lg screens */
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Matrix background canvas -->
-    <canvas id="matrixCanvas"></canvas>
+    <div class="gradient-bg gradient-1"></div>
+    <div class="gradient-bg gradient-2"></div>
+    <div class="gradient-bg gradient-3"></div>
+    <div class="gradient-bg gradient-4"></div>
 
-    <div class="container" id="mainContent">
-        <h1>/// TEMU PROTOCOL: ACCESS INITIATED ///</h1>
-        <div class="input-group">
-            <label for="goodsIdInput">INPUT: TARGET_ID</label>
-            <input type="text" id="goodsIdInput" placeholder="> ENTER TEMU GOODS ID (e.g., 601099516750973)">
+    <div class="absolute top-8 left-8 z-20">
+        <div class="dot-pattern">
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+            <div class="dot"></div><div class="dot"></div><div class="dot"></div>
         </div>
-        <button id="generateButton">/// GENERATE SECURE LINK ///</button>
-        <div class="error-message" id="errorMessage">
-            ERROR: INVALID INPUT. PLEASE PROVIDE A VALID GOODS ID.
-        </div>
-        <div class="result-box" id="resultBox">
-            <p><strong>>>> LINK GENERATED. INITIATE TRANSFER:</strong></p>
-            <a href="#" id="displayedLink">CLICK TO SECURE CHANNEL</a>
+    </div>
+
+    <div class="absolute top-8 right-8 z-20">
+        <svg class="w-10 h-10 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+        </svg>
+    </div>
+
+    <div class="content-wrapper max-w-3xl w-full text-center p-8 md:p-12 lg:p-16 rounded-2xl shadow-xl">
+        <h1 class="main-heading text-4xl font-extrabold text-gray-900 mb-4 leading-tight tracking-tight">
+            EXCLUSIVE <br> OFFERS
+        </h1>
+        <p class="sub-heading text-xl text-gray-700 mb-16">
+            Unlock your next great deal.
+        </p>
+
+        <div id="links-container" class="flex flex-col items-center gap-6 md:gap-8 max-w-md mx-auto">
+            </div>
+
+        <div class="mt-20 text-center text-gray-500 text-sm">
+            <p>&copy; 2025 Digital Access. All rights reserved.</p>
         </div>
     </div>
 
     <script>
-        // Matrix Rain Effect Script
-        const canvas = document.getElementById('matrixCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // Set canvas to full screen and handle resize
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            // Re-initialize drops for new column count
-            const newColumns = Math.floor(canvas.width / fontSize);
-            drops.length = newColumns; // Adjust array size
-            for (let i = 0; i < newColumns; i++) {
-                if (drops[i] === undefined) { // Only initialize new drops
-                    drops[i] = 1;
-                }
-            }
+        // Function to generate a random filename
+        function generateRandomFilename(prefix) {
+            const randomString = Math.random().toString(36).substring(2, 10); // Generates 8 random alphanumeric characters
+            return `${prefix}-${randomString}.html`;
         }
 
-        // Characters for the rain
-        const katakana = 'アァカサタナハマヤラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユルグズヅブプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨロヲゴゾドボポヴッン';
-        const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const nums = '0123456789';
-        const chars = katakana + latin + nums;
+        // List of product link titles
+        const productLinks = [
+            "FREE GIFT LINK GENERATOR",
+            "REBATE 100 LOW-PRICED ITEMS",
+            "DISCOUNT CARD LINK GENERATOR (70-90% OFF)",
+            "FLASH SALE ITEMS (UP TO 99% OFF)",
+            "DAILY DEALS & COUPONS",
+            "NEW USER EXCLUSIVE OFFERS",
+            "BUNDLE DEALS & PACKAGE DISCOUNTS",
+            "REFERRAL BONUS PROGRAM",
+            "LIMITED STOCK CLEARANCE",
+            "VIP EARLY ACCESS DEALS"
+        ];
 
-        const fontSize = 16;
-        let columns = Math.floor(canvas.width / fontSize);
-        const drops = []; // Array of drop positions
+        // Get the container for links
+        const linksContainer = document.getElementById('links-container');
 
-        // Initialize drops
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
+        // Loop through the product links and create dynamic elements
+        productLinks.forEach(linkText => {
+            // Create a slug from the link text for a more readable filename prefix
+            const filenamePrefix = linkText.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            const randomFile = generateRandomFilename(filenamePrefix);
 
-        // Drawing the characters
-        function drawMatrix() {
-            // Semi-transparent black rectangle to fade out old characters
-            ctx.fillStyle = 'rgba(10, 10, 10, 0.05)'; /* Use hacker-dark with transparency */
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Create the anchor element
+            const anchor = document.createElement('a');
+            anchor.href = randomFile;
+            anchor.target = "_blank"; // Open links in a new tab
+            anchor.rel = "noopener noreferrer"; // Security best practice for target="_blank"
+            anchor.className = "w-full"; // Ensure anchor takes full width for centering
 
-            ctx.fillStyle = '#00ff00'; // Neon green for characters
-            ctx.font = `${fontSize}px Fira Code`; // Use Fira Code font
+            // Create the button-like div
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = `link-button px-8 py-4 rounded-full text-lg md:text-xl font-bold cursor-pointer`;
+            buttonDiv.textContent = linkText;
 
-            for (let i = 0; i < drops.length; i++) {
-                const text = chars.charAt(Math.floor(Math.random() * chars.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+            // Add click animation
+            buttonDiv.addEventListener('click', function() {
+                this.classList.add('animate-click');
+            });
 
-                // Send the drop back to the top randomly
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
+            // Remove animation class after it completes to allow re-triggering
+            buttonDiv.addEventListener('animationend', function() {
+                this.classList.remove('animate-click');
+            });
 
-        // Initial resize and set up resize listener
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+            // Append buttonDiv to anchor
+            anchor.appendChild(buttonDiv);
 
-        setInterval(drawMatrix, 30); // Adjust speed here (lower is faster)
-
-
-        // Existing page logic
-        const originalTemuUniversalLinkTemplate = "https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=GOODS_ID_PLACEHOLDER";
-        const goodsIdInput = document.getElementById('goodsIdInput');
-        const generateButton = document.getElementById('generateButton');
-        const displayedLinkElement = document.getElementById('displayedLink');
-        const resultBox = document.getElementById('resultBox');
-        const errorMessage = document.getElementById('errorMessage');
-
-        generateButton.addEventListener('click', function() {
-            const newGoodsId = goodsIdInput.value.trim();
-
-            if (newGoodsId) {
-                errorMessage.style.display = 'none';
-                const actualTemuLink = originalTemuUniversalLinkTemplate.replace('GOODS_ID_PLACEHOLDER', newGoodsId);
-                const encodedTemuLink = encodeURIComponent(actualTemuLink);
-                const intermediaryLink = `secure.html?url=${encodedTemuLink}`;
-
-                displayedLinkElement.textContent = `ACCESS TEMU OFFER FOR ID: ${newGoodsId}`;
-                displayedLinkElement.href = intermediaryLink;
-
-                resultBox.style.display = 'block';
-                resultBox.style.animation = 'none';
-                void resultBox.offsetWidth;
-                resultBox.style.animation = 'fadeIn 0.6s ease-out'; /* Match CSS animation duration */
-
-            } else {
-                errorMessage.style.display = 'block';
-                resultBox.style.display = 'none';
-            }
+            // Append the anchor to the links container
+            linksContainer.appendChild(anchor);
         });
-
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-        document.addEventListener('selectstart', function(e) {
-            e.preventDefault();
-        });
-        document.body.classList.add('no-context-menu');
     </script>
 </body>
 </html>
