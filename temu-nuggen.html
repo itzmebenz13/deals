@@ -284,7 +284,12 @@
                 <div id="loader" class="loader mx-auto"></div>
                 <div id="result" class="hidden flex flex-col items-center gap-4">
                     <p id="success-message" class="text-lg font-medium">The generation was successful. Click the button below to open the Temu app and enjoy a free gift of your choice.</p>
-                    <button id="output-btn" class="output-button">OPEN TEMU</button>
+                    <button id="output-btn" class="output-button">
+                        <span class="flex items-center justify-center text-lg">
+                            Open
+                            <img src="https://logowik.com/content/uploads/images/temu2953.logowik.com.webp" alt="Temu Logo" class="h-6 ml-2">
+                        </span>
+                    </button>
                 </div>
             </div>
         </main>
@@ -313,66 +318,4 @@
             sunIcon.classList.add('hidden');
             moonIcon.classList.remove('hidden');
         }
-        themeSwitcher.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            const isDark = document.documentElement.classList.contains('dark');
-            sunIcon.classList.toggle('hidden', isDark);
-            moonIcon.classList.toggle('hidden', !isDark);
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        });
-
-        menuToggle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            navMenu.classList.toggle('is-active');
-            menuIconOpen.classList.toggle('hidden');
-            menuIconClose.classList.toggle('hidden');
-        });
-
-        window.addEventListener('click', (e) => {
-            if (navMenu.classList.contains('is-active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-                navMenu.classList.remove('is-active');
-                menuIconOpen.classList.remove('hidden');
-                menuIconClose.classList.add('hidden');
-            }
-        });
-
-        // --- TEMU Generator Logic ---
-        const generateBtn = document.getElementById('generate-btn');
-        const goodsIdInput = document.getElementById('goods-id');
-        const outputContainer = document.getElementById('output-container');
-        const loader = document.getElementById('loader');
-        const resultDiv = document.getElementById('result');
-        const outputBtn = document.getElementById('output-btn');
-        const successMessage = document.getElementById('success-message');
-
-        generateBtn.addEventListener('click', () => {
-            const goodsId = goodsIdInput.value.trim();
-            if (!goodsId) {
-                alert('Please enter a Temu Goods ID.');
-                return;
-            }
-
-            // Show the output container and loader
-            outputContainer.classList.remove('hidden');
-            loader.classList.remove('hidden');
-            resultDiv.classList.add('hidden');
-
-            // Simulate loading for 3 seconds
-            setTimeout(() => {
-                const baseURL = 'https://app.temu.com/ph-en/kuiper/un1.html?subj=feed-un&_bg_fs=1&_p_mat1_type=3&_p_jump_id=722&_x_vst_scene=adg&goods_id=';
-                const finalURL = baseURL + goodsId;
-
-                // Set the link for the button via a click event
-                outputBtn.onclick = () => {
-                    window.open(finalURL, '_blank', 'noopener,noreferrer');
-                };
-
-                // Hide loader and show result
-                loader.classList.add('hidden');
-                resultDiv.classList.remove('hidden');
-
-            }, 3000); // 3-second delay
-        });
-    </script>
-</body>
-</html>
+        themeSwitcher
