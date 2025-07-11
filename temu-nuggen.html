@@ -244,7 +244,7 @@
             }
         });
 
-        // --- TOOL 1: TEMU LINK EXTRACTOR ---
+        // --- TOOL 1: TEMU LINK EXTRACTOR (MODIFIED TO USE PUBLIC API) ---
         const extractorBtn = document.getElementById('extractor-btn');
         const linkInput = document.getElementById('temu-link');
         const extractorOutputContainer = document.getElementById('extractor-output-container');
@@ -256,27 +256,42 @@
                 alert('Please enter a valid Temu share link.');
                 return;
             }
-            const apiEndpoint = '/api/extract-temu-id'; // This should point to your Vercel serverless function
+
+            // We use a public CORS proxy to bypass security limitations.
+            const proxyUrl = 'https://api.allorigins.win/get?url=';
+            const targetUrl = encodeURIComponent(shareLink);
+            const apiEndpoint = proxyUrl + targetUrl;
             
             extractorBtn.textContent = 'Extracting...';
             extractorBtn.disabled = true;
             extractorOutputContainer.classList.add('hidden');
 
             try {
-                // This fetch call requires the Vercel backend to be set up
-                const response = await fetch(apiEndpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ url: shareLink })
-                });
+                const response = await fetch(apiEndpoint);
+                if (!response.ok) { throw new Error('Network response was not ok.'); }
+
                 const data = await response.json();
-                if (!data.success) { throw new Error(data.message); }
                 
-                resultIdOutput.textContent = data.goods_id;
+                // The final URL is in the 'status.url' property of the response from this proxy
+                const finalUrl = data.status.url;
+
+                if (!finalUrl) {
+                    throw new Error('Could not find the final URL in the API response.');
+                }
+
+                const urlObject = new URL(finalUrl);
+                const goodsId = urlObject.searchParams.get('goods_id');
+
+                if (!goodsId) {
+                    throw new Error('Goods ID not found in the final link.');
+                }
+
+                resultIdOutput.textContent = goodsId;
                 extractorOutputContainer.classList.remove('hidden');
+
             } catch (error) {
                 console.error(error);
-                alert('Error: Could not extract Goods ID. Make sure the link is valid and the backend service is running.');
+                alert('Error: Could not extract Goods ID. Please check the link and try again.');
             } finally {
                 extractorBtn.textContent = 'Get Goods ID';
                 extractorBtn.disabled = false;
