@@ -433,7 +433,7 @@
     </div>
 
     <script>
-        // --- DOM Element Selection ---
+-
         const themeSwitcher = document.getElementById('theme-switcher');
         const sunIcon = document.getElementById('sun-icon');
         const moonIcon = document.getElementById('moon-icon');
@@ -442,7 +442,6 @@
         const menuIconOpen = document.getElementById('menu-icon-open');
         const menuIconClose = document.getElementById('menu-icon-close');
 
-        // --- Theme Switcher Logic ---
         const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         if (currentTheme === 'dark') {
             document.documentElement.classList.add('dark');
@@ -457,7 +456,6 @@
             localStorage.setItem('theme', isDark ? 'dark' : 'light');
         });
 
-        // --- Collapsible Menu Logic ---
         menuToggle.addEventListener('click', (e) => {
             e.stopPropagation();
             navMenu.classList.toggle('is-active');
@@ -472,12 +470,9 @@
                 menuIconClose.classList.add('hidden');
             }
         });
-
-        // --- Countdown Timer Logic ---
-        // Set the date we're counting down to
+        
         const countDownDate = new Date("Jul 18, 2025 23:59:59").getTime();
 
-        // Get elements
         const daysEl = document.getElementById("days");
         const hoursEl = document.getElementById("hours");
         const minutesEl = document.getElementById("minutes");
@@ -485,27 +480,20 @@
         const redeemBtn = document.getElementById("redeem-button");
         const countdownContainer = document.getElementById("countdown-container");
 
-        // Update the count down every 1 second
         const countdownInterval = setInterval(() => {
-            // Get today's date and time
             const now = new Date().getTime();
 
-            // Find the distance between now and the count down date
             const distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Display the result in the elements, adding a leading zero if needed
             daysEl.innerHTML = days < 10 ? '0' + days : days;
             hoursEl.innerHTML = hours < 10 ? '0' + hours : hours;
             minutesEl.innerHTML = minutes < 10 ? '0' + minutes : minutes;
             secondsEl.innerHTML = seconds < 10 ? '0' + seconds : seconds;
             
-            // If the count down is finished, write some text
             if (distance < 0) {
                 clearInterval(countdownInterval);
                 countdownContainer.innerHTML = `<p class="text-2xl font-bold text-red-600">DEAL EXPIRED</p>`;
