@@ -123,15 +123,6 @@
         @media (min-width: 768px) { .main-header p { font-size: 1.25rem; } }
 
         /* --- Deals Page --- */
-        .section-title {
-            font-size: 1.75rem;
-            font-weight: 800;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 1px solid var(--card-border-color);
-        }
-        
         .deal-card {
             background-color: var(--card-bg-color);
             border: 1px solid var(--card-border-color);
@@ -148,7 +139,7 @@
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
         .deal-card-image {
-            height: 150px;
+            height: 180px; /* Taller image for a 2x2 grid */
             background-color: #e5e5e5;
             display: flex;
             align-items: center;
@@ -160,26 +151,26 @@
             object-fit: cover;
         }
         .deal-card-content {
-            padding: 1rem;
+            padding: 1.5rem;
             flex-grow: 1;
             display: flex;
             flex-direction: column;
         }
         .deal-card-title {
-            font-size: 1.125rem;
+            font-size: 1.25rem;
             font-weight: 700;
         }
         .deal-card-desc {
-            font-size: 0.875rem;
+            font-size: 1rem;
             color: var(--text-muted-color);
-            margin: 0.5rem 0 1rem;
+            margin: 0.5rem 0 1.5rem;
             flex-grow: 1;
         }
         .deal-card-button {
             display: block;
             background-color: var(--primary-btn-bg-color);
             color: var(--primary-btn-text-color);
-            padding: 0.6rem 1rem;
+            padding: 0.75rem 1rem;
             border-radius: 0.5rem;
             font-weight: 600;
             text-align: center;
@@ -187,18 +178,6 @@
         }
         .deal-card-button:hover {
             opacity: 0.8;
-        }
-
-        .featured-deal {
-            display: grid;
-            grid-template-columns: repeat(1, 1fr);
-            md:grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-            align-items: center;
-        }
-        @media (min-width: 768px) {
-            .featured-deal .deal-card-image { height: 100%; }
-            .featured-deal .deal-card-content { padding: 2rem; }
         }
 
         /* Footer */
@@ -231,108 +210,52 @@
 
         <header class="main-header">
             <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-3">
-                Today's Top Deals
+                Current Deals
             </h1>
-            <p>Explore our curated collection of the best offers available right now.</p>
+            <p>The best offers, curated just for you.</p>
         </header>
 
         <main>
-            <section>
-                <a href="#" class="deal-card featured-deal md:grid-cols-2">
-                    <div class="deal-card-image">
-                        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Canva-PR-Banner.png" alt="Canva Pro Deal">
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <a href="temu-500off.html" class="deal-card">
+                    <div class="deal-card-image"><img src="https://logowik.com/content/uploads/images/temu2953.logowik.com.webp" alt="Temu Deal" style="padding: 2rem; object-fit: contain;"></div>
                     <div class="deal-card-content">
-                        <h2 class="text-3xl font-bold mb-2">Canva Pro: 1 Year Free</h2>
-                        <p class="text-lg text-muted-color mb-4">Unlock the full suite of Canva Pro features, including premium templates, brand kits, and unlimited content. Perfect for creators and businesses.</p>
-                        <div class="deal-card-button text-lg py-3 px-6 self-start">Claim Featured Deal</div>
+                        <h3 class="deal-card-title">TEMU ₱500 OFF</h3>
+                        <p class="deal-card-desc">Get a ₱500 discount with a minimum spend of ₱501 on your next purchase with this exclusive voucher.</p>
+                        <div class="deal-card-button">Claim Offer</div>
                     </div>
                 </a>
-            </section>
 
-            <section>
-                <h2 class="section-title">Software & Productivity</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <a href="#" class="deal-card">
-                        <div class="deal-card-image"><img src="https://cdn.worldvectorlogo.com/logos/adobe-creative-cloud.svg" alt="Adobe CC"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Adobe Creative Cloud All Apps</h3>
-                            <p class="deal-card-desc">Get 60% off your first year. Access Photoshop, Illustrator, Premiere Pro, and more.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                    <a href="#" class="deal-card">
-                         <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Microsoft_Office_365_%282022%29.svg" alt="Microsoft 365"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Microsoft 365 Family</h3>
-                            <p class="deal-card-desc">3 months free for new subscribers. Includes Word, Excel, PowerPoint, and 1TB of OneDrive storage.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                    <a href="#" class="deal-card">
-                         <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Notion_app_logo.png" alt="Notion"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Notion Plus with AI</h3>
-                            <p class="deal-card-desc">Get $10 in free credit when you sign up. Organize your life and work with the power of AI.</p>
-                             <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                </div>
-            </section>
+                <a href="#" class="deal-card">
+                    <div class="deal-card-image"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/07/Blog-header-1.png" alt="YouTube Premium"></div>
+                    <div class="deal-card-content">
+                        <h3 class="deal-card-title">YouTube Premium: 1 Month Free</h3>
+                        <p class="deal-card-desc">Enjoy ad-free videos, background play, and YouTube Music free for one month.</p>
+                        <div class="deal-card-button">Start Free Trial</div>
+                    </div>
+                </a>
 
-            <section>
-                <h2 class="section-title">Streaming & Entertainment</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <a href="#" class="deal-card">
-                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png" alt="Netflix"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Netflix Premium Account</h3>
-                            <p class="deal-card-desc">Special offer for new accounts. Watch unlimited movies and TV shows in 4K.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                    <a href="#" class="deal-card">
-                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="YouTube Premium"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">YouTube Premium</h3>
-                            <p class="deal-card-desc">Enjoy 3 months of ad-free videos, background play, and YouTube Music.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                    <a href="#" class="deal-card">
-                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png" alt="Spotify"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Spotify Premium Student</h3>
-                            <p class="deal-card-desc">Get Premium for just ₱65/month. Includes access to other streaming perks.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                </div>
-            </section>
-            
-            <section>
-                <h2 class="section-title">Online Learning</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <a href="#" class="deal-card">
-                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Coursera_2021.svg/2560px-Coursera_2021.svg.png" alt="Coursera"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Coursera Plus Annual</h3>
-                            <p class="deal-card-desc">Save over 30% on an annual subscription and get access to 7,000+ courses.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                    <a href="#" class="deal-card">
-                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Skillshare_logo_new.png" alt="Skillshare"></div>
-                        <div class="deal-card-content">
-                            <h3 class="deal-card-title">Skillshare Premium</h3>
-                            <p class="deal-card-desc">Get a 30-day free trial and explore thousands of creative classes.</p>
-                            <div class="deal-card-button">Get Deal</div>
-                        </div>
-                    </a>
-                </div>
-            </section>
+                <a href="#" class="deal-card">
+                    <div class="deal-card-image"><img src="https://static-cf.canva.com/static/images/paas/canva-pro-horizontal-black.png" alt="Canva Pro" style="padding: 2rem; object-fit: contain;"></div>
+                    <div class="deal-card-content">
+                        <h3 class="deal-card-title">Canva Pro: 1 Month Free</h3>
+                        <p class="deal-card-desc">Unlock premium templates, brand kits, and unlimited content for 30 days.</p>
+                        <div class="deal-card-button">Start Free Trial</div>
+                    </div>
+                </a>
+                
+                <a href="#" class="deal-card">
+                    <div class="deal-card-image"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/12/Generic-FTR-headers_V10-1440x550.jpg" alt="Spotify Premium"></div>
+                    <div class="deal-card-content">
+                        <h3 class="deal-card-title">Spotify Premium: 4 Months Free</h3>
+                        <p class="deal-card-desc">Listen to ad-free music with unlimited skips. Offer available for a limited time.</p>
+                        <div class="deal-card-button">Claim Offer (Limited Stocks)</div>
+                    </div>
+                </a>
 
-            </main>
+            </div>
+        </main>
 
         <footer class="main-footer">
             <p>© 2025 Digital Access. All rights reserved.</p>
