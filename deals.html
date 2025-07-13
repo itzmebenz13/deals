@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Deals - Digital Deals</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS variables for theming */
+        :root {
+            --bg-color: #f5f5f5;
+            --text-color: #0a0a0a;
+            --text-muted-color: #525252;
+            --glow-1-color: #007cf0;
+            --glow-2-color: #1ed760; 
+            --card-bg-color: #ffffff;
+            --card-border-color: rgba(0, 0, 0, 0.1);
+            --nav-bg-color: rgba(245, 245, 245, 0.8);
+            --primary-btn-bg-color: #0a0a0a;
+            --primary-btn-text-color: #f5f5f5;
+        }
+
+        /* Dark mode theme variables */
+        .dark {
+            --bg-color: #0a0a0a;
+            --text-color: #f5f5f5;
+            --text-muted-color: #a3a3a3;
+            --card-bg-color: #1a1a1a;
+            --card-border-color: rgba(255, 255, 255, 0.1);
+            --nav-bg-color: rgba(10, 10, 10, 0.8);
+            --primary-btn-bg-color: #f5f5f5;
+            --primary-btn-text-color: #0a0a0a;
+        }
+
+        /* Base body styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 2rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* Background glow effect */
+        .glow-bg {
+            position: fixed;
+            width: 40vw;
+            height: 40vw;
+            border-radius: 50%;
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+        .glow-1 { background: var(--glow-1-color); top: 5%; left: 10%; }
+        .glow-2 { background: var(--glow-2-color); bottom: 5%; right: 10%; }
+
+        /* Main content wrapper */
+        .content-wrapper {
+            max-w-4xl; /* Wider for deals page */
+            width: 100%;
+            position: relative;
+        }
+        
+        /* Navbar and theme switcher styling */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .theme-switcher, .menu-toggle {
+            background-color: transparent;
+            border: 1px solid var(--card-border-color);
+            color: var(--text-color);
+            border-radius: 9999px;
+            cursor: pointer;
+            padding: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s, border-color 0.3s;
+            z-index: 1001;
+        }
+        .theme-switcher:hover, .menu-toggle:hover {
+            background-color: var(--card-bg-color);
+        }
+        .icon { width: 1.5rem; height: 1.5rem; }
+
+        /* Overlay Navigation Menu */
+        .nav-menu {
+            position: absolute;
+            top: 4.5rem;
+            left: 0;
+            right: 0;
+            background-color: var(--nav-bg-color);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+        }
+        .nav-menu.is-active { opacity: 1; transform: translateY(0); visibility: visible; }
+        .nav-link {
+            display: block; padding: 0.75rem 1rem; border-radius: 0.5rem; text-decoration: none;
+            color: var(--text-muted-color); font-weight: 500; transition: background-color 0.3s, color 0.3s;
+        }
+        .nav-link:hover { background-color: var(--card-bg-color); color: var(--text-color); }
+        
+        /* Main header */
+        .main-header { text-align: center; margin-bottom: 3rem; }
+        .main-header p { font-size: 1.125rem; color: var(--text-muted-color); }
+        @media (min-width: 768px) { .main-header p { font-size: 1.25rem; } }
+
+        /* --- Deals Page --- */
+        .section-title {
+            font-size: 1.75rem;
+            font-weight: 800;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--card-border-color);
+        }
+        
+        .deal-card {
+            background-color: var(--card-bg-color);
+            border: 1px solid var(--card-border-color);
+            border-radius: 1rem;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: var(--text-color);
+        }
+        .deal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+        .deal-card-image {
+            height: 150px;
+            background-color: #e5e5e5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .deal-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .deal-card-content {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .deal-card-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+        .deal-card-desc {
+            font-size: 0.875rem;
+            color: var(--text-muted-color);
+            margin: 0.5rem 0 1rem;
+            flex-grow: 1;
+        }
+        .deal-card-button {
+            display: block;
+            background-color: var(--primary-btn-bg-color);
+            color: var(--primary-btn-text-color);
+            padding: 0.6rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            text-align: center;
+            transition: opacity 0.3s;
+        }
+        .deal-card-button:hover {
+            opacity: 0.8;
+        }
+
+        .featured-deal {
+            display: grid;
+            grid-template-columns: repeat(1, 1fr);
+            md:grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            align-items: center;
+        }
+        @media (min-width: 768px) {
+            .featured-deal .deal-card-image { height: 100%; }
+            .featured-deal .deal-card-content { padding: 2rem; }
+        }
+
+        /* Footer */
+        .main-footer { margin-top: 4rem; text-align: center; font-size: 0.875rem; color: var(--text-muted-color); }
+    </style>
+</head>
+<body>
+    <div class="glow-bg glow-1"></div>
+    <div class="glow-bg glow-2"></div>
+
+    <div class="content-wrapper">
+        <nav class="navbar">
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
+                <svg id="menu-icon-open" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                <svg id="menu-icon-close" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <button id="theme-switcher" class="theme-switcher" aria-label="Toggle theme">
+                <svg id="sun-icon" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M12 12a5 5 0 100-10 5 5 0 000 10z"></path></svg>
+                <svg id="moon-icon" class="icon hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+        </nav>
+        <div id="nav-menu" class="nav-menu">
+            <div class="flex flex-col gap-2">
+                <a href="https://itzmebenz13.github.io/deals" class="nav-link">Home</a>
+                <a href="about.html" class="nav-link">About</a>
+                <a href="categories.html" class="nav-link">Categories</a>
+                <a href="services.html" class="nav-link">Services</a>
+            </div>
+        </div>
+
+        <header class="main-header">
+            <h1 class="text-5xl md:text-7xl font-black tracking-tighter mb-3">
+                Today's Top Deals
+            </h1>
+            <p>Explore our curated collection of the best offers available right now.</p>
+        </header>
+
+        <main>
+            <section>
+                <a href="#" class="deal-card featured-deal md:grid-cols-2">
+                    <div class="deal-card-image">
+                        <img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/05/Canva-PR-Banner.png" alt="Canva Pro Deal">
+                    </div>
+                    <div class="deal-card-content">
+                        <h2 class="text-3xl font-bold mb-2">Canva Pro: 1 Year Free</h2>
+                        <p class="text-lg text-muted-color mb-4">Unlock the full suite of Canva Pro features, including premium templates, brand kits, and unlimited content. Perfect for creators and businesses.</p>
+                        <div class="deal-card-button text-lg py-3 px-6 self-start">Claim Featured Deal</div>
+                    </div>
+                </a>
+            </section>
+
+            <section>
+                <h2 class="section-title">Software & Productivity</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="#" class="deal-card">
+                        <div class="deal-card-image"><img src="https://cdn.worldvectorlogo.com/logos/adobe-creative-cloud.svg" alt="Adobe CC"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Adobe Creative Cloud All Apps</h3>
+                            <p class="deal-card-desc">Get 60% off your first year. Access Photoshop, Illustrator, Premiere Pro, and more.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                    <a href="#" class="deal-card">
+                         <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Microsoft_Office_365_%282022%29.svg" alt="Microsoft 365"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Microsoft 365 Family</h3>
+                            <p class="deal-card-desc">3 months free for new subscribers. Includes Word, Excel, PowerPoint, and 1TB of OneDrive storage.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                    <a href="#" class="deal-card">
+                         <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e5/Notion_app_logo.png" alt="Notion"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Notion Plus with AI</h3>
+                            <p class="deal-card-desc">Get $10 in free credit when you sign up. Organize your life and work with the power of AI.</p>
+                             <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="section-title">Streaming & Entertainment</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="#" class="deal-card">
+                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png" alt="Netflix"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Netflix Premium Account</h3>
+                            <p class="deal-card-desc">Special offer for new accounts. Watch unlimited movies and TV shows in 4K.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                    <a href="#" class="deal-card">
+                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/e/ef/Youtube_logo.png" alt="YouTube Premium"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">YouTube Premium</h3>
+                            <p class="deal-card-desc">Enjoy 3 months of ad-free videos, background play, and YouTube Music.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                    <a href="#" class="deal-card">
+                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Spotify_logo_without_text.svg/2048px-Spotify_logo_without_text.svg.png" alt="Spotify"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Spotify Premium Student</h3>
+                            <p class="deal-card-desc">Get Premium for just ₱65/month. Includes access to other streaming perks.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+            
+            <section>
+                <h2 class="section-title">Online Learning</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <a href="#" class="deal-card">
+                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Coursera_2021.svg/2560px-Coursera_2021.svg.png" alt="Coursera"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Coursera Plus Annual</h3>
+                            <p class="deal-card-desc">Save over 30% on an annual subscription and get access to 7,000+ courses.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                    <a href="#" class="deal-card">
+                        <div class="deal-card-image"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Skillshare_logo_new.png" alt="Skillshare"></div>
+                        <div class="deal-card-content">
+                            <h3 class="deal-card-title">Skillshare Premium</h3>
+                            <p class="deal-card-desc">Get a 30-day free trial and explore thousands of creative classes.</p>
+                            <div class="deal-card-button">Get Deal</div>
+                        </div>
+                    </a>
+                </div>
+            </section>
+
+            </main>
+
+        <footer class="main-footer">
+            <p>© 2025 Digital Access. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- Theme Switcher & Nav Menu Logic ---
+        const themeSwitcher = document.getElementById('theme-switcher');
+        const sunIcon = document.getElementById('sun-icon');
+        const moonIcon = document.getElementById('moon-icon');
+        const menuToggle = document.getElementById('menu-toggle');
+        const navMenu = document.getElementById('nav-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        const currentTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        if (currentTheme === 'dark') { document.documentElement.classList.add('dark'); sunIcon.classList.add('hidden'); moonIcon.classList.remove('hidden'); }
+        themeSwitcher.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            sunIcon.classList.toggle('hidden', isDark);
+            moonIcon.classList.toggle('hidden', !isDark);
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+        menuToggle.addEventListener('click', (e) => { e.stopPropagation(); navMenu.classList.toggle('is-active'); menuIconOpen.classList.toggle('hidden'); menuIconClose.classList.toggle('hidden'); });
+        window.addEventListener('click', (e) => {
+            if (navMenu.classList.contains('is-active') && !navMenu.contains(e.target) && !menuToggle.contains(e.target)) {
+                navMenu.classList.remove('is-active');
+                menuIconOpen.classList.remove('hidden');
+                menuIconClose.classList.add('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
