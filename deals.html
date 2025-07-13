@@ -13,7 +13,7 @@
             --text-color: #0a0a0a;
             --text-muted-color: #525252;
             --glow-1-color: #007cf0;
-            --glow-2-color: #1ed760;
+            --glow-2-color: #1ed760; 
             --card-bg-color: #ffffff;
             --card-border-color: rgba(0, 0, 0, 0.1);
             --nav-bg-color: rgba(245, 245, 245, 0.8);
@@ -65,7 +65,7 @@
             width: 100%;
             position: relative;
         }
-
+        
         /* Navbar and theme switcher styling */
         .navbar {
             display: flex;
@@ -116,7 +116,7 @@
             color: var(--text-muted-color); font-weight: 500; transition: background-color 0.3s, color 0.3s;
         }
         .nav-link:hover { background-color: var(--card-bg-color); color: var(--text-color); }
-
+        
         /* Main header */
         .main-header { text-align: center; margin-bottom: 3rem; }
         .main-header p { font-size: 1.125rem; color: var(--text-muted-color); }
@@ -138,9 +138,11 @@
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
+        
+        /* UPDATED STYLES FOR IMAGES */
         .deal-card-image {
-            height: 180px; /* Taller image for a 2x2 grid */
-            background-color: #e5e5e5;
+            height: 180px;
+            background-color: #333; /* Dark fallback for cover images */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -148,8 +150,18 @@
         .deal-card-image img {
             width: 100%;
             height: 100%;
-            object-fit: contain;
+            object-fit: cover; /* Default fit for most images */
         }
+        
+        /* Specific styling for the first card (Temu) to make it fit better */
+        .deal-card:nth-child(1) .deal-card-image {
+            background-color: #ffffff; /* White background for the Temu image */
+            padding: 1rem; /* Adds some space around the contained image */
+        }
+        .deal-card:nth-child(1) .deal-card-image img {
+            object-fit: contain; /* Ensures the whole Temu image is visible */
+        }
+
         .deal-card-content {
             padding: 1.5rem;
             flex-grow: 1;
@@ -219,7 +231,9 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
 
                 <a href="#" class="deal-card">
-                    <div class="deal-card-image"><img src="https://arzhost.com/blogs/wp-content/uploads/2024/07/2500-1024x614.webp" alt="Temu Deal" style="object-fit: contain;"></div>
+                    <div class="deal-card-image">
+                         <img src="https://arzhost.com/blogs/wp-content/uploads/2024/07/2500-1024x614.webp" alt="Temu Deal">
+                    </div>
                     <div class="deal-card-content">
                         <h3 class="deal-card-title">TEMU ₱500 OFF</h3>
                         <p class="deal-card-desc">Get a ₱500 discount on your next purchase with this exclusive voucher.</p>
@@ -237,14 +251,14 @@
                 </a>
 
                 <a href="#" class="deal-card">
-                    <div class="deal-card-image"><img src="https://static-cf.canva.com/static/images/paas/canva-pro-horizontal-black.png" alt="Canva Pro" style="padding: 2rem; object-fit: contain;"></div>
+                    <div class="deal-card-image"><img src="https://static-cf.canva.com/static/images/paas/canva-pro-horizontal-black.png" alt="Canva Pro" style="object-fit: contain; padding: 2rem;"></div>
                     <div class="deal-card-content">
                         <h3 class="deal-card-title">Canva Pro: 1 Month Free</h3>
                         <p class="deal-card-desc">Unlock premium templates, brand kits, and unlimited content for 30 days.</p>
                         <div class="deal-card-button">Start Free Trial</div>
                     </div>
                 </a>
-
+                
                 <a href="#" class="deal-card">
                     <div class="deal-card-image"><img src="https://storage.googleapis.com/pr-newsroom-wp/1/2023/12/Generic-FTR-headers_V10-1440x550.jpg" alt="Spotify Premium"></div>
                     <div class="deal-card-content">
